@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title id="pageTitle">Matematik</title>
+<style>
+  :root{
+    --bg:#f4f7f9; --card:#ffffff; --border:#dbe4ea; --text:#1c2b36; --muted:#5c7182;
+    --primary:#2563eb; --primary-dark:#1d4ed8; --ok:#15803d; --ok-bg:#dcfce7;
+    --bad:#b91c1c; --bad-bg:#fee2e2; --accent:#f59e0b; --radius:12px;
+    --nota-bg:#fffbeb; --nota-border:#fcd34d;
+    --contoh-bg:#eff6ff; --contoh-border:#93c5fd;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;}
+  #app{max-width:780px;margin:0 auto;padding:14px 14px 60px;}
+  header.top{position:sticky;top:0;background:var(--bg);z-index:20;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+  header.top h1{font-size:1.05rem;margin:0 0 2px;font-weight:800;color:var(--primary-dark);}
+  header.top p{margin:0;font-size:0.78rem;color:var(--muted);}
+  .progresswrap{margin-top:8px;background:#e7edf2;border-radius:999px;height:9px;overflow:hidden;}
+  .progressbar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width .3s;}
+  .progresslabel{font-size:0.72rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between;}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px;}
+  .toc button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-size:0.72rem;color:var(--text);cursor:pointer;}
+  section.subtopic{margin-bottom:10px;}
+  .subtopic > h2{font-size:1.05rem;background:#dbeafe;color:var(--primary-dark);padding:10px 14px;border-radius:10px;margin:26px 0 12px;border-left:5px solid var(--primary);}
+  .notabox{background:var(--nota-bg);border:1px solid var(--nota-border);border-left:5px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.87rem;}
+  .notabox h3{margin:0 0 6px;font-size:0.82rem;color:#92400e;}
+  .contohbox{background:var(--contoh-bg);border:1px solid var(--contoh-border);border-left:5px solid #3b82f6;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.88rem;}
+  .contohbox h3{margin:0 0 6px;font-size:0.85rem;color:var(--primary-dark);}
+  .contohbox .q{white-space:pre-line;margin-bottom:8px;}
+  .contohbox ol{margin:0 0 6px;padding-left:18px;}
+  .contohbox li{margin-bottom:3px;}
+  .contohbox .final{font-weight:800;color:var(--primary-dark);}
+  h3.latihan-head{font-size:0.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em;margin:20px 0 8px;border-bottom:2px solid var(--border);padding-bottom:4px;}
+  .grouptitle{font-size:0.85rem;font-weight:700;color:var(--muted);margin:16px 0 8px;}
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:12px;box-shadow:0 1px 2px rgba(20,40,60,0.04);}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;}
+  .qnum{font-weight:800;color:var(--primary-dark);font-size:0.88rem;flex-shrink:0;}
+  .qstatus{font-size:1.05rem;}
+  .stem{font-size:0.92rem;margin:2px 0 10px;white-space:pre-line;}
+  .part{display:flex;align-items:center;gap:8px;margin:7px 0;flex-wrap:wrap;}
+  .part label{font-size:0.85rem;font-weight:700;color:var(--muted);min-width:22px;}
+  .part input{flex:1;min-width:110px;padding:7px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;}
+  .part input.correct{border-color:var(--ok);background:var(--ok-bg);}
+  .part input.wrong{border-color:var(--bad);background:var(--bad-bg);}
+  .part .mark{font-size:1rem;width:20px;text-align:center;}
+  .btnrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button.semak{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  button.semak:active{background:var(--primary-dark);}
+  button.toggle{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  .solution{display:none;margin-top:12px;background:#f8fafc;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;font-size:0.86rem;}
+  .solution.show{display:block;}
+  .solution h4{margin:0 0 6px;font-size:0.8rem;color:var(--primary-dark);}
+  .solution ol{margin:0;padding-left:18px;}
+  .solution li{margin-bottom:4px;}
+  .solution .final{margin-top:8px;font-weight:800;color:var(--ok);}
+  .badge-open{display:inline-block;background:#fef3c7;color:#92400e;font-size:0.68rem;padding:2px 7px;border-radius:999px;font-weight:700;margin-left:6px;}
+  footer.foot{text-align:center;color:var(--muted);font-size:0.75rem;margin-top:30px;padding-top:16px;border-top:1px solid var(--border);}
+  #backTop{position:fixed;bottom:16px;right:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:none;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <h1 id="chapTitle">📘 <span id="chapTitleText"></span></h1>
+    <p><span id="formLevelText">Matematik Tingkatan 1</span> (KSSM) · Nota + Contoh + Latihan (<span id="soalanCountText">0</span> soalan)</p>
+    <div class="progresswrap"><div class="progressbar" id="progressbar"></div></div>
+    <div class="progresslabel"><span id="progressText">0 / 66 disemak</span><span id="scoreText">Skor: 0</span></div>
+  </header>
+  <div class="toc" id="toc"></div>
+  <div id="content"></div>
+  <footer class="foot">Latih Tubi Buku Teks <span id="formLevelFooterText">Matematik Tingkatan 1</span> · Dibina oleh Cg Din</footer>
+</div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+window.__CHAPTER_DATA__ = {"chapterCode": "6", "chapterTitle": "Bentuk Geometri Tiga Dimensi", "formLevel": "Matematik Tingkatan 2", "subtopics": [{"code": "6.1", "title": "6.1 Sifat Geometri Bentuk Tiga Dimensi", "notes": [{"heading": "Bentuk 3D Utama", "html": "<b>Prisma</b>: 2 tapak poligon kongruen & selari, muka lain segi empat.<br><b>Piramid</b>: 1 tapak poligon, muka lain segi tiga bertemu di puncak.<br><b>Silinder</b>: 2 tapak bulatan kongruen, 1 permukaan melengkung.<br><b>Kon</b>: 1 tapak bulatan, 1 puncak, 1 permukaan melengkung.<br><b>Sfera</b>: semua titik permukaan sama jarak dari pusat."}], "examples": [], "exercises": [{"group": "6.1a", "title": "JOM CUBA 6.1 — Sifat Geometri Bentuk Tiga Dimensi", "questions": [{"num": 1, "stem": "Nyatakan sifat geometri bagi objek 3D: (a) kubus (b) silinder (c) kon (d) sfera.", "parts": [{"label": "a", "ans": ["6 muka segi empat sama, 8 bucu, 12 tepi"], "steps": []}, {"label": "b", "ans": ["2 tapak bulatan kongruen, 1 permukaan melengkung"], "steps": []}, {"label": "c", "ans": ["1 tapak bulatan, 1 puncak, 1 permukaan melengkung"], "steps": []}, {"label": "d", "ans": ["semua titik permukaan sama jarak dari pusat"], "steps": []}], "open": false, "sample": null}, {"num": 2, "stem": "Nyatakan bentuk 3D yang mempunyai sifat: (a) 1 puncak, 1 permukaan melengkung (b) 1 puncak, tapak poligon (c) semua titik permukaan sama jarak dari pusat.", "parts": [{"label": "a", "ans": ["kon"], "steps": []}, {"label": "b", "ans": ["piramid"], "steps": []}, {"label": "c", "ans": ["sfera"], "steps": []}], "open": false, "sample": null}]}]}, {"code": "6.2", "title": "6.2 Bentangan Bentuk Tiga Dimensi", "notes": [{"heading": "⚠️ Bahagian Ini Perlukan Amali Lukisan", "html": "Bentangan (net) memerlukan lukisan/pembinaan tangan sebenar. Sila sediakan kertas grid, gunting, dan rujuk buku teks m.s. 102-103."}, {"heading": "Apakah Bentangan?", "html": "<b>Bentangan</b> ialah rajah 2D yang terhasil apabila permukaan bentuk 3D dibuka rata. Satu bentuk 3D boleh mempunyai PELBAGAI bentangan berbeza."}], "examples": [{"title": "Contoh 1", "q": "Lakarkan bentangan bagi kubus, silinder, dan kon.", "steps": ["Kubus: 6 segi empat sama bercantum.", "Silinder: 2 bulatan + 1 segi empat tepat (panjang=lilitan bulatan).", "Kon: 1 bulatan (tapak) + 1 sektor bulatan (permukaan melengkung)."], "ans": "Rujuk rajah buku teks untuk lukisan penuh"}], "exercises": [{"group": "6.2a", "title": "JOM CUBA 6.2 — Bentangan (Rujuk Rajah — Amali)", "questions": [{"num": 1, "stem": "Lukis bentangan dan bina model bagi kuboid 2cm×4cm×8cm, kon jejari 5cm, dan bentuk lain yang diberi.", "parts": [], "open": true, "sample": "Latihan lukisan/pembinaan — rujuk dimensi dalam buku teks m.s. 103 dan gunakan kertas grid 1cm."}, {"num": 2, "stem": "Nyatakan bentuk 3D yang terhasil daripada bentangan yang diberi, dan bina model sebenar.", "parts": [], "open": true, "sample": "Kenal pasti bentuk berdasarkan bilangan & jenis muka dalam bentangan (rujuk buku teks m.s. 103)."}]}]}, {"code": "6.3", "title": "6.3 Luas Permukaan Bentuk Tiga Dimensi", "notes": [{"heading": "Rumus Luas Permukaan", "html": "<b>Kubus</b>: 6×sisi².<br><b>Kuboid</b>: 2(pl+ph+lh).<br><b>Piramid</b>: luas tapak + jumlah luas muka segi tiga.<br><b>Silinder</b>: 2πj²+2πjt.<br><b>Kon</b>: πj²+πjs (s=tinggi sendeng).<br><b>Sfera</b>: 4πj²."}], "examples": [{"title": "Contoh 2", "q": "Hitung luas permukaan kubus bersisi 4cm.", "steps": ["6×4²=96cm²."], "ans": "96 cm²"}, {"title": "Contoh 3", "q": "Silinder jejari 7cm, tinggi 9cm. Hitung luas permukaan (π=22/7).", "steps": ["2×22/7×7²+2×22/7×7×9=308+396=704cm²."], "ans": "704 cm²"}, {"title": "Contoh 4", "q": "Kon jejari 3cm, tinggi sendeng 5cm. Hitung luas permukaan (π=22/7).", "steps": ["22/7×3²+22/7×3×5=28.29+47.14=75.43cm²."], "ans": "75.43 cm²"}, {"title": "Contoh 5", "q": "Sfera jejari 14cm. Hitung luas permukaan (π=22/7).", "steps": ["4×22/7×14²=2464cm²."], "ans": "2464 cm²"}], "exercises": [{"group": "6.3a", "title": "JOM CUBA 6.3 — Luas Permukaan Bentuk Tiga Dimensi", "questions": [{"num": 1, "stem": "Hitung luas permukaan objek berikut.\n(a) Kubus bersisi 6cm\n(b) Kuboid 14cm×4cm×6cm\n(c) Piramid tapak segi empat sama 3cm, tinggi sendeng segi tiga muka mencukupi utk kira luas (anggap tinggi condong=5cm)", "parts": [{"label": "a", "ans": ["216"], "steps": ["6×6²=216cm²."]}, {"label": "b", "ans": ["328"], "steps": ["2(lw+lh+wh)=2(14×4+14×6+4×6)=2(56+84+24)=328cm²."]}, {"label": "c", "ans": ["39"], "steps": ["(Nota: rujuk rajah asal buku teks untuk dimensi tepat setiap bentuk.)"]}], "open": false, "sample": null}, {"num": 2, "stem": "Hitung luas permukaan (a) silinder jejari 5cm, tinggi 12cm (π=22/7) (b) kon jejari 4cm, tinggi sendeng 6cm.", "parts": [{"label": "a", "ans": ["534.29"], "steps": ["2×22/7×5²+2×22/7×5×12=157.14+377.14=534.29cm²."]}, {"label": "b", "ans": ["125.71"], "steps": ["22/7×4²+22/7×4×6=50.29+75.43=125.71cm²."]}], "open": false, "sample": null}, {"num": 3, "stem": "Hitung luas permukaan gabungan bentuk (rujuk rajah buku teks m.s. 115).", "parts": [{"label": null, "ans": ["ikut rajah"], "steps": ["(Nota: rujuk rajah asal buku teks untuk dimensi tepat setiap bentuk.)"]}], "open": false, "sample": null}]}]}, {"code": "6.4", "title": "6.4 Isi Padu Bentuk Tiga Dimensi", "notes": [{"heading": "Rumus Isi Padu", "html": "<b>Prisma</b>: luas keratan rentas × tinggi.<br><b>Silinder</b>: πj²t.<br><b>Piramid</b>: ⅓ × luas tapak × tinggi.<br><b>Kon</b>: ⅓πj²t.<br><b>Sfera</b>: ⁴⁄₃πj³."}], "examples": [{"title": "Contoh 7", "q": "Prisma segi tiga: tapak 8cm, tinggi segi tiga 3cm, panjang prisma 12cm. Hitung isi padu.", "steps": ["Luas keratan=½×8×3=12.", "Isi padu=12×12=144cm³."], "ans": "144 cm³"}, {"title": "Contoh 9", "q": "Kon jejari 7cm, tinggi 12cm. Hitung isi padu (π=22/7).", "steps": ["⅓×22/7×7²×12=616cm³."], "ans": "616 cm³"}, {"title": "Contoh 11", "q": "Sfera jejari 7cm. Hitung isi padu (π=22/7).", "steps": ["4/3×22/7×7³=1437.33cm³."], "ans": "1437.33 cm³"}, {"title": "Contoh 13", "q": "Bekas aiskrim=kon(j2.5,t4)+silinder(j2.5,t6). Hitung isi padu 10000 bekas dalam liter (π=22/7).", "steps": ["Silinder=117.86cm³. Kon=26.19cm³. 1 bekas=144.05cm³.", "10000 bekas=1440500cm³=1440.5 liter."], "ans": "1440.5 liter (≈1441 liter dibundarkan)"}], "exercises": [{"group": "6.4a", "title": "JOM CUBA 6.4 — Isi Padu Bentuk Tiga Dimensi", "questions": [{"num": 1, "stem": "Hitung isi padu bentuk berikut.\n(a) Prisma segi tiga: keratan rentas segi tiga tapak 8cm,tinggi 5cm; panjang prisma 12cm\n(b) Silinder jejari 4cm,tinggi 10cm (π=22/7)\n(c) Kon jejari 4cm,tinggi 13cm (π=22/7)", "parts": [{"label": "a", "ans": ["240"], "steps": ["Luas keratan=½×8×5=20. Isi padu=20×12=240cm³."]}, {"label": "b", "ans": ["502.86"], "steps": ["22/7×4²×10=502.86cm³."]}, {"label": "c", "ans": ["217.90"], "steps": ["⅓×22/7×4²×13=217.90cm³."]}], "open": false, "sample": null}, {"num": 2, "stem": "Hitung isi padu kawasan berlorek/gabungan (rujuk rajah buku teks m.s. 114).", "parts": [{"label": null, "ans": ["ikut rajah"], "steps": ["(Nota: rujuk rajah asal buku teks untuk dimensi tepat setiap bentuk.)"]}], "open": false, "sample": null}, {"num": 3, "stem": "Ali tuang air ke silinder jejari 7cm,tinggi 15cm sehingga penuh. Kon jejari 4cm,tinggi 7cm dimasukkan penuh ke air, kemudian dikeluarkan. Hitung isi padu baki air.", "parts": [{"label": null, "ans": ["2195.43"], "steps": ["Isi padu silinder=22/7×7²×15=2310cm³.", "Isi padu kon=⅓×22/7×4²×7=117.33cm³.", "(Nota: air disesarkan bersamaan isi padu kon yang tenggelam, bukan ditolak — semak konteks soalan penuh dgn buku fizikal untuk pengiraan tepat.)"]}], "open": false, "sample": null}, {"num": 4, "stem": "Blok piramid tapak segi empat sama 15cm, tinggi 10cm dileburkan jadi bebola sfera jejari 5mm=0.5cm. Berapa blok piramid perlu untuk 2850 biji bebola?", "parts": [{"label": null, "ans": ["2"], "steps": ["Isi padu piramid=⅓×15²×10=750cm³.", "Isi padu 1 sfera=4/3×22/7×0.5³=2.095cm³.", "Isi padu 2850 sfera=2850×2.095=5971cm³.", "Bilangan blok=5971/750≈8 (bundarkan ke atas)."]}], "open": false, "sample": null}]}]}], "review": {"title": "Latihan Tambahan — Ulang Kaji Bab 6", "exercises": [{"group": "Latihan Bab 6 (Bahagian B)", "title": "Latihan Tambahan — Ulang Kaji Bab 6", "questions": [{"num": 1, "stem": "Sebuah bongkah gabungan piramid & kubus, tinggi bongkah 11cm, sisi kubus 5cm, tinggi sendeng segi tiga muka=6.5cm. Hitung luas permukaan gabungan (dalam m²).", "parts": [{"label": null, "ans": ["0.019"], "steps": ["Luas=5×(5×5)+4×(½×5×6.5)=125+65=190cm².", "190cm²=190/10000=0.019m²."]}], "open": false, "sample": null}, {"num": 2, "stem": "Hitung isi padu sfera berjejari 7cm (π=22/7).", "parts": [{"label": null, "ans": ["1437.33"], "steps": ["4/3×22/7×7³=1437.33cm³."]}], "open": false, "sample": null}, {"num": 3, "stem": "Hitung isi padu hemisfera berjejari 5cm (π=22/7, 2dp).", "parts": [{"label": null, "ans": ["261.90"], "steps": ["½×4/3×22/7×5³=261.90cm³."]}], "open": false, "sample": null}, {"num": 4, "stem": "Salim jual aiskrim dalam bekas gabungan kon(jejari2.5cm,tinggi4cm)+silinder(jejari2.5cm,tinggi6cm). Sasaran jual 10000 bekas. Berapa liter aiskrim perlu (bundarkan ke liter terhampir, π=22/7)?", "parts": [{"label": null, "ans": ["1441"], "steps": ["Isi padu silinder=22/7×2.5²×6=117.86cm³.", "Isi padu kon=⅓×22/7×2.5²×4=26.19cm³.", "Isi padu 1 bekas=117.86+26.19=144.05cm³.", "10000 bekas=1440500cm³=1440.5 liter ≈ 1441 liter (bundarkan ke atas kerana sasaran jualan)."]}], "open": false, "sample": null}, {"num": 5, "stem": "Hitung luas permukaan sfera berjejari 14cm (π=22/7).", "parts": [{"label": null, "ans": ["2464"], "steps": ["4×22/7×14²=2464cm²."]}], "open": false, "sample": null}]}]}};
+(function(){
+"use strict";
+
+function normalize(s){
+  if (s === null || s === undefined) return "";
+  s = String(s).toLowerCase().trim();
+  s = s.replace(/rm/g,"").replace(/\s+/g,"").replace(/–/g,"-").replace(/—/g,"-");
+  s = s.replace(/≥/g,">=").replace(/≤/g,"<=").replace(/⩾/g,">=").replace(/⩽/g,"<=");
+  return s;
+}
+
+function toNumber(s){
+  s = normalize(s);
+  if (s === "") return null;
+  if (/^-?\d+\/\d+$/.test(s)){
+    var parts = s.split("/");
+    return parseFloat(parts[0])/parseFloat(parts[1]);
+  }
+  if (/^-?\d+(\.\d+)?$/.test(s)){
+    return parseFloat(s);
+  }
+  return null;
+}
+
+function fuzzyNumberMatch(input, accepted){
+  var vi = toNumber(input);
+  if (vi === null) return false;
+  for (var i=0;i<accepted.length;i++){
+    var va = toNumber(accepted[i]);
+    if (va !== null && Math.abs(vi - va) < 0.005) return true;
+  }
+  return false;
+}
+
+function checkPart(inputRaw, acceptedList){
+  var inputN = normalize(inputRaw);
+  if (inputN === "") return false;
+  for (var i=0;i<acceptedList.length;i++){
+    if (normalize(acceptedList[i]) === inputN) return true;
+  }
+  var inputSpaced = String(inputRaw).toLowerCase().trim().replace(/–/g,"-");
+  for (var j=0;j<acceptedList.length;j++){
+    if (String(acceptedList[j]).toLowerCase().trim() === inputSpaced) return true;
+  }
+  if (fuzzyNumberMatch(inputRaw, acceptedList)) return true;
+  return false;
+}
+
+var CHAPTER = window.__CHAPTER_DATA__;
+var totalQuestions = 0;
+var totalPartsCount = 0;
+CHAPTER.subtopics.forEach(function(st){
+  st.exercises.forEach(function(grp){
+    grp.questions.forEach(function(qq){
+      totalQuestions++;
+      totalPartsCount += qq.open ? 1 : qq.parts.length;
+    });
+  });
+});
+CHAPTER.review.exercises.forEach(function(grp){
+  grp.questions.forEach(function(qq){
+    totalQuestions++;
+    totalPartsCount += qq.open ? 1 : qq.parts.length;
+  });
+});
+
+var checkedCount = 0;
+var correctPartsCount = 0;
+
+function updateProgress(){
+  document.getElementById("progressText").textContent = checkedCount + " / " + totalQuestions + " disemak";
+  document.getElementById("scoreText").textContent = "Skor: " + correctPartsCount + " / " + totalPartsCount;
+  var pct = totalQuestions ? Math.round((checkedCount/totalQuestions)*100) : 0;
+  document.getElementById("progressbar").style.width = pct + "%";
+}
+
+function nl2br(s){ return s.replace(/\n/g,"<br>"); }
+
+function buildToc(){
+  var toc = document.getElementById("toc");
+  CHAPTER.subtopics.forEach(function(st){
+    var btn = document.createElement("button");
+    btn.textContent = st.code;
+    btn.onclick = function(){ document.getElementById("st-"+st.code).scrollIntoView({behavior:"smooth", block:"start"}); };
+    toc.appendChild(btn);
+  });
+  var btn2 = document.createElement("button");
+  btn2.textContent = "Praktis";
+  btn2.onclick = function(){ document.getElementById("review-sec").scrollIntoView({behavior:"smooth", block:"start"}); };
+  toc.appendChild(btn2);
+}
+
+var qCounter = 0;
+function renderExerciseGroup(grp, htmlArr){
+  htmlArr.push('<div class="grouptitle">'+grp.title+'</div>');
+  grp.questions.forEach(function(qq){
+    var qid = "q"+(qCounter++);
+    htmlArr.push('<div class="qcard" id="card-'+qid+'">');
+    htmlArr.push('<div class="qhead"><span class="qnum">Soalan '+qq.num+'</span><span class="qstatus" id="status-'+qid+'"></span></div>');
+    htmlArr.push('<div class="stem">'+nl2br(qq.stem)+(qq.open?'<span class="badge-open">Jawapan Terbuka</span>':'')+'</div>');
+    if (qq.open){
+      htmlArr.push('<div class="part"><label>Jwp</label><input type="text" data-part="0" placeholder="Tulis pengiraan anda di sini"><span class="mark" id="mark-'+qid+'-0"></span></div>');
+    } else {
+      qq.parts.forEach(function(pp, pi){
+        var lbl = pp.label ? "("+pp.label+")" : "Jwp";
+        htmlArr.push('<div class="part"><label>'+lbl+'</label><input type="text" data-part="'+pi+'" placeholder="Masukkan jawapan"><span class="mark" id="mark-'+qid+'-'+pi+'"></span></div>');
+      });
+    }
+    htmlArr.push('<div class="btnrow"><button class="semak" data-action="semak" data-qid="'+qid+'">Semak Jawapan</button><button class="toggle" data-action="toggle" data-qid="'+qid+'">Lihat Langkah</button></div>');
+    htmlArr.push('<div class="solution" id="sol-'+qid+'">');
+    if (qq.open){
+      htmlArr.push('<h4>Contoh Jawapan (jawapan lain yang sah turut diterima)</h4><p>'+qq.sample+'</p>');
+    } else {
+      qq.parts.forEach(function(pp){
+        var lbl = pp.label ? "("+pp.label+")" : "";
+        htmlArr.push('<h4>Langkah Penyelesaian '+lbl+'</h4><ol>');
+        pp.steps.forEach(function(st){ htmlArr.push('<li>'+st+'</li>'); });
+        htmlArr.push('</ol><div class="final">Jawapan: '+pp.ans[0]+'</div>');
+      });
+    }
+    htmlArr.push('</div>'); // solution
+    htmlArr.push('</div>'); // qcard
+    QMAP[qid] = qq;
+  });
+}
+
+var QMAP = {};
+
+function setTitles(){
+  var formLevel = CHAPTER.formLevel || "Matematik Tingkatan 1";
+  var t = "Bab " + CHAPTER.chapterCode + " — " + CHAPTER.chapterTitle;
+  document.getElementById("chapTitleText").textContent = t;
+  document.getElementById("pageTitle").textContent = t + " | " + formLevel;
+  var flEl = document.getElementById("formLevelText");
+  if (flEl) flEl.textContent = formLevel;
+  var flFoot = document.getElementById("formLevelFooterText");
+  if (flFoot) flFoot.textContent = formLevel;
+  var scEl = document.getElementById("soalanCountText");
+  if (scEl) scEl.textContent = totalQuestions;
+}
+
+function render(){
+  setTitles();
+  var htmlArr = [];
+  CHAPTER.subtopics.forEach(function(st){
+    htmlArr.push('<section class="subtopic" id="st-'+st.code+'"><h2>'+st.title+'</h2>');
+    st.notes.forEach(function(n){
+      htmlArr.push('<div class="notabox"><h3>📝 Nota — '+n.heading+'</h3><div>'+n.html+'</div></div>');
+    });
+    st.examples.forEach(function(ex){
+      htmlArr.push('<div class="contohbox"><h3>📖 '+ex.title+'</h3><div class="q">'+nl2br(ex.q)+'</div><ol>');
+      ex.steps.forEach(function(s){ htmlArr.push('<li>'+s+'</li>'); });
+      htmlArr.push('</ol><div class="final">Jawapan: '+ex.ans+'</div></div>');
+    });
+    htmlArr.push('<h3 class="latihan-head">✏️ Latihan</h3>');
+    st.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+    htmlArr.push('</section>');
+  });
+  htmlArr.push('<section class="subtopic" id="review-sec"><h2>'+CHAPTER.review.title+'</h2><h3 class="latihan-head">✏️ Latihan Ulang Kaji</h3>');
+  CHAPTER.review.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+  htmlArr.push('</section>');
+  document.getElementById("content").innerHTML = htmlArr.join("");
+}
+
+function onSemak(qid){
+  var qq = QMAP[qid];
+  var card = document.getElementById("card-"+qid);
+  var alreadyChecked = card.getAttribute("data-checked") === "1";
+
+  if (qq.open){
+    var inp = card.querySelector('input[data-part="0"]');
+    var val = inp.value.trim();
+    var mark = document.getElementById("mark-"+qid+"-0");
+    if (val.length > 0){ mark.textContent = "✅"; inp.classList.add("correct"); } else { mark.textContent = ""; }
+    document.getElementById("sol-"+qid).classList.add("show");
+    if (!alreadyChecked){
+      checkedCount++; correctPartsCount += 1; card.setAttribute("data-checked","1"); updateProgress();
+    }
+    document.getElementById("status-"+qid).textContent = "📝";
+    return;
+  }
+
+  var allCorrect = true, correctHere = 0;
+  qq.parts.forEach(function(pp, pi){
+    var inp = card.querySelector('input[data-part="'+pi+'"]');
+    var mark = document.getElementById("mark-"+qid+"-"+pi);
+    var ok = checkPart(inp.value, pp.ans);
+    inp.classList.remove("correct","wrong");
+    if (ok){ inp.classList.add("correct"); mark.textContent = "✅"; correctHere++; }
+    else { inp.classList.add("wrong"); mark.textContent = "❌"; allCorrect = false; }
+  });
+
+  document.getElementById("sol-"+qid).classList.add("show");
+  document.getElementById("status-"+qid).textContent = allCorrect ? "✅" : "❌";
+
+  if (!alreadyChecked){
+    checkedCount++; correctPartsCount += correctHere;
+    card.setAttribute("data-checked","1"); card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  } else {
+    var prevCorrect = parseInt(card.getAttribute("data-correct-count")||"0",10);
+    correctPartsCount += (correctHere - prevCorrect);
+    card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  }
+}
+
+function onToggle(qid){
+  document.getElementById("sol-"+qid).classList.toggle("show");
+}
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (t.matches('button[data-action="semak"]')) onSemak(t.getAttribute("data-qid"));
+  else if (t.matches('button[data-action="toggle"]')) onToggle(t.getAttribute("data-qid"));
+});
+
+window.addEventListener("scroll", function(){
+  document.getElementById("backTop").style.display = window.scrollY > 400 ? "block" : "none";
+});
+
+buildToc();
+render();
+updateProgress();
+
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title id="pageTitle">Matematik</title>
+<style>
+  :root{
+    --bg:#f4f7f9; --card:#ffffff; --border:#dbe4ea; --text:#1c2b36; --muted:#5c7182;
+    --primary:#2563eb; --primary-dark:#1d4ed8; --ok:#15803d; --ok-bg:#dcfce7;
+    --bad:#b91c1c; --bad-bg:#fee2e2; --accent:#f59e0b; --radius:12px;
+    --nota-bg:#fffbeb; --nota-border:#fcd34d;
+    --contoh-bg:#eff6ff; --contoh-border:#93c5fd;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;}
+  #app{max-width:780px;margin:0 auto;padding:14px 14px 60px;}
+  header.top{position:sticky;top:0;background:var(--bg);z-index:20;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+  header.top h1{font-size:1.05rem;margin:0 0 2px;font-weight:800;color:var(--primary-dark);}
+  header.top p{margin:0;font-size:0.78rem;color:var(--muted);}
+  .progresswrap{margin-top:8px;background:#e7edf2;border-radius:999px;height:9px;overflow:hidden;}
+  .progressbar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width .3s;}
+  .progresslabel{font-size:0.72rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between;}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px;}
+  .toc button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-size:0.72rem;color:var(--text);cursor:pointer;}
+  section.subtopic{margin-bottom:10px;}
+  .subtopic > h2{font-size:1.05rem;background:#dbeafe;color:var(--primary-dark);padding:10px 14px;border-radius:10px;margin:26px 0 12px;border-left:5px solid var(--primary);}
+  .notabox{background:var(--nota-bg);border:1px solid var(--nota-border);border-left:5px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.87rem;}
+  .notabox h3{margin:0 0 6px;font-size:0.82rem;color:#92400e;}
+  .contohbox{background:var(--contoh-bg);border:1px solid var(--contoh-border);border-left:5px solid #3b82f6;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.88rem;}
+  .contohbox h3{margin:0 0 6px;font-size:0.85rem;color:var(--primary-dark);}
+  .contohbox .q{white-space:pre-line;margin-bottom:8px;}
+  .contohbox ol{margin:0 0 6px;padding-left:18px;}
+  .contohbox li{margin-bottom:3px;}
+  .contohbox .final{font-weight:800;color:var(--primary-dark);}
+  h3.latihan-head{font-size:0.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em;margin:20px 0 8px;border-bottom:2px solid var(--border);padding-bottom:4px;}
+  .grouptitle{font-size:0.85rem;font-weight:700;color:var(--muted);margin:16px 0 8px;}
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:12px;box-shadow:0 1px 2px rgba(20,40,60,0.04);}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;}
+  .qnum{font-weight:800;color:var(--primary-dark);font-size:0.88rem;flex-shrink:0;}
+  .qstatus{font-size:1.05rem;}
+  .stem{font-size:0.92rem;margin:2px 0 10px;white-space:pre-line;}
+  .part{display:flex;align-items:center;gap:8px;margin:7px 0;flex-wrap:wrap;}
+  .part label{font-size:0.85rem;font-weight:700;color:var(--muted);min-width:22px;}
+  .part input{flex:1;min-width:110px;padding:7px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;}
+  .part input.correct{border-color:var(--ok);background:var(--ok-bg);}
+  .part input.wrong{border-color:var(--bad);background:var(--bad-bg);}
+  .part .mark{font-size:1rem;width:20px;text-align:center;}
+  .btnrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button.semak{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  button.semak:active{background:var(--primary-dark);}
+  button.toggle{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  .solution{display:none;margin-top:12px;background:#f8fafc;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;font-size:0.86rem;}
+  .solution.show{display:block;}
+  .solution h4{margin:0 0 6px;font-size:0.8rem;color:var(--primary-dark);}
+  .solution ol{margin:0;padding-left:18px;}
+  .solution li{margin-bottom:4px;}
+  .solution .final{margin-top:8px;font-weight:800;color:var(--ok);}
+  .badge-open{display:inline-block;background:#fef3c7;color:#92400e;font-size:0.68rem;padding:2px 7px;border-radius:999px;font-weight:700;margin-left:6px;}
+  footer.foot{text-align:center;color:var(--muted);font-size:0.75rem;margin-top:30px;padding-top:16px;border-top:1px solid var(--border);}
+  #backTop{position:fixed;bottom:16px;right:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:none;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <h1 id="chapTitle">📘 <span id="chapTitleText"></span></h1>
+    <p><span id="formLevelText">Matematik Tingkatan 1</span> (KSSM) · Nota + Contoh + Latihan (<span id="soalanCountText">0</span> soalan)</p>
+    <div class="progresswrap"><div class="progressbar" id="progressbar"></div></div>
+    <div class="progresslabel"><span id="progressText">0 / 66 disemak</span><span id="scoreText">Skor: 0</span></div>
+  </header>
+  <div class="toc" id="toc"></div>
+  <div id="content"></div>
+  <footer class="foot">Latih Tubi Buku Teks <span id="formLevelFooterText">Matematik Tingkatan 1</span> · Dibina oleh Cg Din</footer>
+</div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+window.__CHAPTER_DATA__ = {"chapterCode": "5", "chapterTitle": "Bulatan", "formLevel": "Matematik Tingkatan 2", "subtopics": [{"code": "5.1", "title": "5.1 Sifat Bulatan", "notes": [{"heading": "Bahagian Bulatan", "html": "<b>Pusat</b>: titik tetap. <b>Jejari</b>: garis dari pusat ke lilitan. <b>Diameter</b>: perentas terpanjang, melalui pusat (=2×jejari). <b>Perentas</b>: garis menyambung 2 titik pada lilitan. <b>Lengkok</b>: sebahagian lilitan. <b>Sektor</b>: rantau dibatasi 2 jejari & 1 lengkok. <b>Tembereng</b>: rantau dibatasi 1 perentas & 1 lengkok."}], "examples": [{"title": "Contoh 1", "q": "Kenal pasti bahagian bulatan berlabel a-f dalam rajah (O=pusat).", "steps": ["a=perentas, b=diameter, c=jejari, d=lilitan, e=sektor, f=lengkok."], "ans": "Lihat penerangan"}], "exercises": [{"group": "5.1a", "title": "JOM CUBA 5.1 — Sifat Bulatan (Rujuk Rajah untuk Pembinaan)", "questions": [{"num": 1, "stem": "Namakan bahagian bulatan (rajah m.s. 80): (i) titik O (ii) garis AOC (iii) sektor AOB (iv) garis OA (v) lengkok AB (vi) garis BC.", "parts": [{"label": "i", "ans": ["pusat"], "steps": []}, {"label": "ii", "ans": ["diameter"], "steps": []}, {"label": "iii", "ans": ["sektor"], "steps": []}, {"label": "iv", "ans": ["jejari"], "steps": []}, {"label": "v", "ans": ["lengkok"], "steps": []}, {"label": "vi", "ans": ["perentas"], "steps": []}], "open": false, "sample": null}, {"num": 2, "stem": "Bina bulatan berjejari (a) 3cm (b) 4.5cm (c) 2.5cm (d) 6cm.", "parts": [], "open": true, "sample": "Guna jangka lukis: tetapkan bukaan pada jejari yang dikehendaki, lukis bulatan penuh dari pusat."}]}]}, {"code": "5.2", "title": "5.2 Sifat Simetri Perentas", "notes": [{"heading": "Sifat-sifat Penting", "html": "(a) Diameter ialah paksi simetri bulatan.<br>(b) Jejari berserenjang dgn perentas MEMBAHAGI DUA SAMA perentas itu (dan sebaliknya).<br>(c) Pembahagi dua sama serenjang bagi mana-mana perentas SENTIASA melalui pusat bulatan.<br>(d) Perentas SAMA PANJANG → lengkok SAMA PANJANG (dan sebaliknya).<br>(e) Perentas SAMA PANJANG → SAMA JARAK dari pusat (dan sebaliknya)."}], "examples": [{"title": "Contoh 2", "q": "MN perentas, OK⊥MN dgn OK=3cm,NK=4cm. Hitung ON.", "steps": ["ON²=OK²+NK²=9+16=25.", "ON=5cm."], "ans": "5 cm"}, {"title": "Contoh 3", "q": "MN⊥jejari OP pada S. Jejari=10cm, OS=8cm. Hitung MN.", "steps": ["MS=√(10²-8²)=√36=6.", "MN=2×MS=12cm."], "ans": "12 cm"}, {"title": "Contoh 4", "q": "RS=TU=24cm (perentas sama panjang), OP=5cm. (a) Panjang PR? (c) Jejari?", "steps": ["(a) PR=24/2=12cm (jejari⊥perentas membahagi dua sama).", "(c) OR=√(12²+5²)=√169=13cm."], "ans": "(a) 12cm (c) jejari=13cm"}], "exercises": [{"group": "5.2a", "title": "JOM CUBA 5.2 — Sifat Simetri Perentas", "questions": [{"num": 1, "stem": "MNOP dan KNL garis lurus, O pusat bulatan. MN=8cm, NP=18cm. Hitung panjang KL.", "parts": [{"label": null, "ans": ["24"], "steps": ["(Nota: rujuk rajah asal buku teks m.s. 85 untuk konfigurasi penuh.) Guna sifat perentas sama jarak/panjang dan teorem Pythagoras seperti Contoh 4."]}], "open": false, "sample": null}, {"num": 2, "stem": "JKL garis lurus, JK=KL=15cm (K ialah titik tengah perentas JL), jejari bulatan=25cm, KOM garis lurus (M pada lilitan, melalui O). Hitung panjang KOM.", "parts": [{"label": null, "ans": ["45"], "steps": ["JL=30cm (perentas). K titik tengah, maka OK⊥JL.", "OK=√(25²-15²)=√(625-225)=√400=20cm.", "KOM=KO+OM=20+25=45cm (OM=jejari=25cm)."]}], "open": false, "sample": null}]}]}, {"code": "5.3", "title": "5.3 Lilitan dan Luas Bulatan", "notes": [{"heading": "Rumus Asas", "html": "<b>Lilitan = πd = 2πj</b><br><b>Luas = πj²</b><br>π ≈ 3.142 atau 22/7."}, {"heading": "Lengkok dan Sektor", "html": "<b>Panjang lengkok = (θ/360°) × 2πj</b><br><b>Luas sektor = (θ/360°) × πj²</b><br>θ = sudut pada pusat yang dicangkum."}], "examples": [{"title": "Contoh 6", "q": "Hitung lilitan: (a) d=14cm (π=22/7) (b) j=21.3cm (π=3.142).", "steps": ["(a) 22/7×14=44cm.", "(b) 2×3.142×21.3=133.85cm."], "ans": "(a) 44cm (b) 133.85cm"}, {"title": "Contoh 8", "q": "Hitung luas bulatan: (a) d=10cm (b) j=7cm (π=22/7).", "steps": ["(a) 22/7×5²=78.57cm².", "(b) 22/7×7²=154cm²."], "ans": "(a) 78.57cm² (b) 154cm²"}, {"title": "Contoh 12", "q": "Jejari 14cm. Hitung panjang lengkok minor PQ, sudut pusat 60°.", "steps": ["(60/360)×2×22/7×14=14.67cm."], "ans": "14.67cm"}, {"title": "Contoh 15", "q": "Jejari 21mm, sudut sektor 100°. Hitung luas sektor.", "steps": ["(100/360)×22/7×21²=385mm²."], "ans": "385mm²"}, {"title": "Contoh 17", "q": "Taman 63m×58m, 4 sukuan bulatan jejari 7m (bunga), kolam bulat d=28m. Hitung luas rumput.", "steps": ["Luas taman=3654m². Bunga(4 sukuan=1 bulatan)=154m². Kolam=616m².", "Rumput=3654-154-616=2884m²."], "ans": "2884 m²"}], "exercises": [{"group": "5.3a", "title": "JOM CUBA 5.3 — Lilitan dan Luas Bulatan", "questions": [{"num": 1, "stem": "Hitung lilitan bulatan (guna π=22/7) yang mempunyai\n(a) jejari 7cm\n(b) jejari 56cm\n(c) diameter 9.2cm (2dp)\n(d) diameter 98mm.", "parts": [{"label": "a", "ans": ["44"], "steps": ["2×22/7×7=44cm."]}, {"label": "b", "ans": ["352"], "steps": ["2×22/7×56=352cm."]}, {"label": "c", "ans": ["28.91"], "steps": ["22/7×9.2=28.91cm."]}, {"label": "d", "ans": ["308"], "steps": ["22/7×98=308mm."]}], "open": false, "sample": null}, {"num": 2, "stem": "Diberi lilitan bulatan=24.5cm (π=3.142). Hitung (a) diameter (2dp) (b) jejari (2dp).", "parts": [{"label": "a", "ans": ["7.80"], "steps": ["d=24.5/3.142=7.80cm."]}, {"label": "b", "ans": ["3.90"], "steps": ["j=7.80/2=3.90cm."]}], "open": false, "sample": null}, {"num": 3, "stem": "Hitung luas bulatan (π=22/7, 2dp) dengan jejari\n(a) 21m\n(b) 56mm\n(c) 7cm\n(d) 1 2/5 cm.", "parts": [{"label": "a", "ans": ["1386"], "steps": ["22/7×21²=1386m²."]}, {"label": "b", "ans": ["9856"], "steps": ["22/7×56²=9856mm²."]}, {"label": "c", "ans": ["154"], "steps": ["22/7×7²=154cm²."]}, {"label": "d", "ans": ["6.16"], "steps": ["22/7×(1.4)²=6.16cm²."]}], "open": false, "sample": null}, {"num": 4, "stem": "Luas bulatan=38.5cm² (π=22/7). Hitung (a) jejari (b) lilitan (2dp).", "parts": [{"label": "a", "ans": ["3.5"], "steps": ["j²=38.5×7/22=12.25 → j=3.5cm."]}, {"label": "b", "ans": ["22"], "steps": ["2×22/7×3.5=22cm."]}], "open": false, "sample": null}, {"num": 5, "stem": "Hitung luas bulatan jika lilitan=15.4cm (π=22/7, 2dp).", "parts": [{"label": null, "ans": ["18.87"], "steps": ["j=15.4/(2×22/7)=2.45cm.", "Luas=22/7×2.45²=18.87cm²."]}], "open": false, "sample": null}, {"num": 6, "stem": "Hitung jejari apabila panjang lengkok dan sudut pusat diberi (2dp).\n(a) 11cm, 45°\n(b) 4.3cm, 35°\n(c) 30.8cm, 120°\n(d) 110cm, 200°.", "parts": [{"label": "a", "ans": ["14.01"], "steps": ["j=(panjang lengkok×360)/(θ×2π)=(11×360)/(45×2×22/7)=14.01cm."]}, {"label": "b", "ans": ["7.04"], "steps": ["(4.3×360)/(35×2×22/7)≈7.04cm."]}, {"label": "c", "ans": ["14.70"], "steps": ["(30.8×360)/(120×2×22/7)≈14.70cm."]}, {"label": "d", "ans": ["31.51"], "steps": ["(110×360)/(200×2×22/7)≈31.51cm."]}], "open": false, "sample": null}, {"num": 7, "stem": "Diberi jejari dan luas sektor, hitung sudut pusat.\n(a) jejari 14cm, luas sektor 18.48cm²\n(b) jejari 21m, luas sektor 27.72m²\n(c) jejari 8.4cm, luas sektor 15.4cm².", "parts": [{"label": "a", "ans": ["10.8"], "steps": ["θ=(18.48×360)/(22/7×14²)=10.8°."]}, {"label": "b", "ans": ["7.2"], "steps": ["θ=(27.72×360)/(22/7×21²)=7.2°."]}, {"label": "c", "ans": ["25.0"], "steps": ["θ=(15.4×360)/(22/7×8.4²)=25.0°."]}], "open": false, "sample": null}]}]}], "review": {"title": "Latihan Tambahan — Ulang Kaji Bab 5", "exercises": [{"group": "Latihan Bab 5 (Bahagian B)", "title": "Latihan Tambahan — Ulang Kaji Bab 5", "questions": [{"num": 1, "stem": "Diberi luas bulatan=616cm² (π=22/7). Hitung jejari dan diameter.", "parts": [{"label": "jejari", "ans": ["14"], "steps": ["j²=616×7/22=196 → j=14cm."]}, {"label": "diameter", "ans": ["28"], "steps": ["d=2×14=28cm."]}], "open": false, "sample": null}, {"num": 2, "stem": "Diberi lilitan bulatan=66cm (π=22/7). Hitung luas bulatan.", "parts": [{"label": null, "ans": ["346.5"], "steps": ["j=66/(2×22/7)=10.5cm.", "Luas=22/7×10.5²=346.5cm²."]}], "open": false, "sample": null}, {"num": 3, "stem": "Diberi luas bulatan=75.46cm² (π=22/7). Hitung lilitan bulatan.", "parts": [{"label": null, "ans": ["30.8"], "steps": ["j²=75.46×7/22=24.01 → j=4.9cm.", "Lilitan=2×22/7×4.9=30.8cm."]}], "open": false, "sample": null}, {"num": 4, "stem": "Bulatan jejari 14cm berpusat O. Hitung panjang lengkok minor PQ yang mencangkum 60° pada pusat (2dp).", "parts": [{"label": null, "ans": ["14.67"], "steps": ["Panjang lengkok=(60/360)×2×22/7×14=14.67cm."]}], "open": false, "sample": null}, {"num": 5, "stem": "Bulatan jejari 21cm, ∠ROS=72°. Hitung panjang lengkok MAJOR RS.", "parts": [{"label": null, "ans": ["105.6"], "steps": ["Sudut major=360-72=288°.", "Panjang lengkok=(288/360)×2×22/7×21=105.6cm."]}], "open": false, "sample": null}, {"num": 6, "stem": "Bulatan jejari 21mm, pusat O. Hitung luas sektor minor MON dgn sudut pusat 100° (π=22/7).", "parts": [{"label": null, "ans": ["385"], "steps": ["Luas sektor=(100/360)×22/7×21²=385mm²."]}], "open": false, "sample": null}, {"num": 7, "stem": "Taman rekreasi segi empat tepat 63m×58m. 4 penjuru sukuan bulatan jejari 7m ditanam bunga. Kolam bulat tengah diameter 28m. Kawasan lain rumput karpet. Hitung luas kawasan rumput (π=22/7).", "parts": [{"label": null, "ans": ["2884"], "steps": ["Luas taman=63×58=3654m².", "Luas 4 sukuan bulatan (=1 bulatan penuh jejari 7)=22/7×7²=154m².", "Luas kolam=22/7×14²=616m².", "Luas rumput=3654-154-616=2884m²."]}], "open": false, "sample": null}]}]}};
+(function(){
+"use strict";
+
+function normalize(s){
+  if (s === null || s === undefined) return "";
+  s = String(s).toLowerCase().trim();
+  s = s.replace(/rm/g,"").replace(/\s+/g,"").replace(/–/g,"-").replace(/—/g,"-");
+  s = s.replace(/≥/g,">=").replace(/≤/g,"<=").replace(/⩾/g,">=").replace(/⩽/g,"<=");
+  return s;
+}
+
+function toNumber(s){
+  s = normalize(s);
+  if (s === "") return null;
+  if (/^-?\d+\/\d+$/.test(s)){
+    var parts = s.split("/");
+    return parseFloat(parts[0])/parseFloat(parts[1]);
+  }
+  if (/^-?\d+(\.\d+)?$/.test(s)){
+    return parseFloat(s);
+  }
+  return null;
+}
+
+function fuzzyNumberMatch(input, accepted){
+  var vi = toNumber(input);
+  if (vi === null) return false;
+  for (var i=0;i<accepted.length;i++){
+    var va = toNumber(accepted[i]);
+    if (va !== null && Math.abs(vi - va) < 0.005) return true;
+  }
+  return false;
+}
+
+function checkPart(inputRaw, acceptedList){
+  var inputN = normalize(inputRaw);
+  if (inputN === "") return false;
+  for (var i=0;i<acceptedList.length;i++){
+    if (normalize(acceptedList[i]) === inputN) return true;
+  }
+  var inputSpaced = String(inputRaw).toLowerCase().trim().replace(/–/g,"-");
+  for (var j=0;j<acceptedList.length;j++){
+    if (String(acceptedList[j]).toLowerCase().trim() === inputSpaced) return true;
+  }
+  if (fuzzyNumberMatch(inputRaw, acceptedList)) return true;
+  return false;
+}
+
+var CHAPTER = window.__CHAPTER_DATA__;
+var totalQuestions = 0;
+var totalPartsCount = 0;
+CHAPTER.subtopics.forEach(function(st){
+  st.exercises.forEach(function(grp){
+    grp.questions.forEach(function(qq){
+      totalQuestions++;
+      totalPartsCount += qq.open ? 1 : qq.parts.length;
+    });
+  });
+});
+CHAPTER.review.exercises.forEach(function(grp){
+  grp.questions.forEach(function(qq){
+    totalQuestions++;
+    totalPartsCount += qq.open ? 1 : qq.parts.length;
+  });
+});
+
+var checkedCount = 0;
+var correctPartsCount = 0;
+
+function updateProgress(){
+  document.getElementById("progressText").textContent = checkedCount + " / " + totalQuestions + " disemak";
+  document.getElementById("scoreText").textContent = "Skor: " + correctPartsCount + " / " + totalPartsCount;
+  var pct = totalQuestions ? Math.round((checkedCount/totalQuestions)*100) : 0;
+  document.getElementById("progressbar").style.width = pct + "%";
+}
+
+function nl2br(s){ return s.replace(/\n/g,"<br>"); }
+
+function buildToc(){
+  var toc = document.getElementById("toc");
+  CHAPTER.subtopics.forEach(function(st){
+    var btn = document.createElement("button");
+    btn.textContent = st.code;
+    btn.onclick = function(){ document.getElementById("st-"+st.code).scrollIntoView({behavior:"smooth", block:"start"}); };
+    toc.appendChild(btn);
+  });
+  var btn2 = document.createElement("button");
+  btn2.textContent = "Praktis";
+  btn2.onclick = function(){ document.getElementById("review-sec").scrollIntoView({behavior:"smooth", block:"start"}); };
+  toc.appendChild(btn2);
+}
+
+var qCounter = 0;
+function renderExerciseGroup(grp, htmlArr){
+  htmlArr.push('<div class="grouptitle">'+grp.title+'</div>');
+  grp.questions.forEach(function(qq){
+    var qid = "q"+(qCounter++);
+    htmlArr.push('<div class="qcard" id="card-'+qid+'">');
+    htmlArr.push('<div class="qhead"><span class="qnum">Soalan '+qq.num+'</span><span class="qstatus" id="status-'+qid+'"></span></div>');
+    htmlArr.push('<div class="stem">'+nl2br(qq.stem)+(qq.open?'<span class="badge-open">Jawapan Terbuka</span>':'')+'</div>');
+    if (qq.open){
+      htmlArr.push('<div class="part"><label>Jwp</label><input type="text" data-part="0" placeholder="Tulis pengiraan anda di sini"><span class="mark" id="mark-'+qid+'-0"></span></div>');
+    } else {
+      qq.parts.forEach(function(pp, pi){
+        var lbl = pp.label ? "("+pp.label+")" : "Jwp";
+        htmlArr.push('<div class="part"><label>'+lbl+'</label><input type="text" data-part="'+pi+'" placeholder="Masukkan jawapan"><span class="mark" id="mark-'+qid+'-'+pi+'"></span></div>');
+      });
+    }
+    htmlArr.push('<div class="btnrow"><button class="semak" data-action="semak" data-qid="'+qid+'">Semak Jawapan</button><button class="toggle" data-action="toggle" data-qid="'+qid+'">Lihat Langkah</button></div>');
+    htmlArr.push('<div class="solution" id="sol-'+qid+'">');
+    if (qq.open){
+      htmlArr.push('<h4>Contoh Jawapan (jawapan lain yang sah turut diterima)</h4><p>'+qq.sample+'</p>');
+    } else {
+      qq.parts.forEach(function(pp){
+        var lbl = pp.label ? "("+pp.label+")" : "";
+        htmlArr.push('<h4>Langkah Penyelesaian '+lbl+'</h4><ol>');
+        pp.steps.forEach(function(st){ htmlArr.push('<li>'+st+'</li>'); });
+        htmlArr.push('</ol><div class="final">Jawapan: '+pp.ans[0]+'</div>');
+      });
+    }
+    htmlArr.push('</div>'); // solution
+    htmlArr.push('</div>'); // qcard
+    QMAP[qid] = qq;
+  });
+}
+
+var QMAP = {};
+
+function setTitles(){
+  var formLevel = CHAPTER.formLevel || "Matematik Tingkatan 1";
+  var t = "Bab " + CHAPTER.chapterCode + " — " + CHAPTER.chapterTitle;
+  document.getElementById("chapTitleText").textContent = t;
+  document.getElementById("pageTitle").textContent = t + " | " + formLevel;
+  var flEl = document.getElementById("formLevelText");
+  if (flEl) flEl.textContent = formLevel;
+  var flFoot = document.getElementById("formLevelFooterText");
+  if (flFoot) flFoot.textContent = formLevel;
+  var scEl = document.getElementById("soalanCountText");
+  if (scEl) scEl.textContent = totalQuestions;
+}
+
+function render(){
+  setTitles();
+  var htmlArr = [];
+  CHAPTER.subtopics.forEach(function(st){
+    htmlArr.push('<section class="subtopic" id="st-'+st.code+'"><h2>'+st.title+'</h2>');
+    st.notes.forEach(function(n){
+      htmlArr.push('<div class="notabox"><h3>📝 Nota — '+n.heading+'</h3><div>'+n.html+'</div></div>');
+    });
+    st.examples.forEach(function(ex){
+      htmlArr.push('<div class="contohbox"><h3>📖 '+ex.title+'</h3><div class="q">'+nl2br(ex.q)+'</div><ol>');
+      ex.steps.forEach(function(s){ htmlArr.push('<li>'+s+'</li>'); });
+      htmlArr.push('</ol><div class="final">Jawapan: '+ex.ans+'</div></div>');
+    });
+    htmlArr.push('<h3 class="latihan-head">✏️ Latihan</h3>');
+    st.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+    htmlArr.push('</section>');
+  });
+  htmlArr.push('<section class="subtopic" id="review-sec"><h2>'+CHAPTER.review.title+'</h2><h3 class="latihan-head">✏️ Latihan Ulang Kaji</h3>');
+  CHAPTER.review.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+  htmlArr.push('</section>');
+  document.getElementById("content").innerHTML = htmlArr.join("");
+}
+
+function onSemak(qid){
+  var qq = QMAP[qid];
+  var card = document.getElementById("card-"+qid);
+  var alreadyChecked = card.getAttribute("data-checked") === "1";
+
+  if (qq.open){
+    var inp = card.querySelector('input[data-part="0"]');
+    var val = inp.value.trim();
+    var mark = document.getElementById("mark-"+qid+"-0");
+    if (val.length > 0){ mark.textContent = "✅"; inp.classList.add("correct"); } else { mark.textContent = ""; }
+    document.getElementById("sol-"+qid).classList.add("show");
+    if (!alreadyChecked){
+      checkedCount++; correctPartsCount += 1; card.setAttribute("data-checked","1"); updateProgress();
+    }
+    document.getElementById("status-"+qid).textContent = "📝";
+    return;
+  }
+
+  var allCorrect = true, correctHere = 0;
+  qq.parts.forEach(function(pp, pi){
+    var inp = card.querySelector('input[data-part="'+pi+'"]');
+    var mark = document.getElementById("mark-"+qid+"-"+pi);
+    var ok = checkPart(inp.value, pp.ans);
+    inp.classList.remove("correct","wrong");
+    if (ok){ inp.classList.add("correct"); mark.textContent = "✅"; correctHere++; }
+    else { inp.classList.add("wrong"); mark.textContent = "❌"; allCorrect = false; }
+  });
+
+  document.getElementById("sol-"+qid).classList.add("show");
+  document.getElementById("status-"+qid).textContent = allCorrect ? "✅" : "❌";
+
+  if (!alreadyChecked){
+    checkedCount++; correctPartsCount += correctHere;
+    card.setAttribute("data-checked","1"); card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  } else {
+    var prevCorrect = parseInt(card.getAttribute("data-correct-count")||"0",10);
+    correctPartsCount += (correctHere - prevCorrect);
+    card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  }
+}
+
+function onToggle(qid){
+  document.getElementById("sol-"+qid).classList.toggle("show");
+}
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (t.matches('button[data-action="semak"]')) onSemak(t.getAttribute("data-qid"));
+  else if (t.matches('button[data-action="toggle"]')) onToggle(t.getAttribute("data-qid"));
+});
+
+window.addEventListener("scroll", function(){
+  document.getElementById("backTop").style.display = window.scrollY > 400 ? "block" : "none";
+});
+
+buildToc();
+render();
+updateProgress();
+
+})();
+
+</script>
+</body>
+</html>

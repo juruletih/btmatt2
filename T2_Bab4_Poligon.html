@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title id="pageTitle">Matematik</title>
+<style>
+  :root{
+    --bg:#f4f7f9; --card:#ffffff; --border:#dbe4ea; --text:#1c2b36; --muted:#5c7182;
+    --primary:#2563eb; --primary-dark:#1d4ed8; --ok:#15803d; --ok-bg:#dcfce7;
+    --bad:#b91c1c; --bad-bg:#fee2e2; --accent:#f59e0b; --radius:12px;
+    --nota-bg:#fffbeb; --nota-border:#fcd34d;
+    --contoh-bg:#eff6ff; --contoh-border:#93c5fd;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;}
+  #app{max-width:780px;margin:0 auto;padding:14px 14px 60px;}
+  header.top{position:sticky;top:0;background:var(--bg);z-index:20;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+  header.top h1{font-size:1.05rem;margin:0 0 2px;font-weight:800;color:var(--primary-dark);}
+  header.top p{margin:0;font-size:0.78rem;color:var(--muted);}
+  .progresswrap{margin-top:8px;background:#e7edf2;border-radius:999px;height:9px;overflow:hidden;}
+  .progressbar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width .3s;}
+  .progresslabel{font-size:0.72rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between;}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px;}
+  .toc button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-size:0.72rem;color:var(--text);cursor:pointer;}
+  section.subtopic{margin-bottom:10px;}
+  .subtopic > h2{font-size:1.05rem;background:#dbeafe;color:var(--primary-dark);padding:10px 14px;border-radius:10px;margin:26px 0 12px;border-left:5px solid var(--primary);}
+  .notabox{background:var(--nota-bg);border:1px solid var(--nota-border);border-left:5px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.87rem;}
+  .notabox h3{margin:0 0 6px;font-size:0.82rem;color:#92400e;}
+  .contohbox{background:var(--contoh-bg);border:1px solid var(--contoh-border);border-left:5px solid #3b82f6;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.88rem;}
+  .contohbox h3{margin:0 0 6px;font-size:0.85rem;color:var(--primary-dark);}
+  .contohbox .q{white-space:pre-line;margin-bottom:8px;}
+  .contohbox ol{margin:0 0 6px;padding-left:18px;}
+  .contohbox li{margin-bottom:3px;}
+  .contohbox .final{font-weight:800;color:var(--primary-dark);}
+  h3.latihan-head{font-size:0.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em;margin:20px 0 8px;border-bottom:2px solid var(--border);padding-bottom:4px;}
+  .grouptitle{font-size:0.85rem;font-weight:700;color:var(--muted);margin:16px 0 8px;}
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:12px;box-shadow:0 1px 2px rgba(20,40,60,0.04);}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;}
+  .qnum{font-weight:800;color:var(--primary-dark);font-size:0.88rem;flex-shrink:0;}
+  .qstatus{font-size:1.05rem;}
+  .stem{font-size:0.92rem;margin:2px 0 10px;white-space:pre-line;}
+  .part{display:flex;align-items:center;gap:8px;margin:7px 0;flex-wrap:wrap;}
+  .part label{font-size:0.85rem;font-weight:700;color:var(--muted);min-width:22px;}
+  .part input{flex:1;min-width:110px;padding:7px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;}
+  .part input.correct{border-color:var(--ok);background:var(--ok-bg);}
+  .part input.wrong{border-color:var(--bad);background:var(--bad-bg);}
+  .part .mark{font-size:1rem;width:20px;text-align:center;}
+  .btnrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button.semak{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  button.semak:active{background:var(--primary-dark);}
+  button.toggle{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  .solution{display:none;margin-top:12px;background:#f8fafc;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;font-size:0.86rem;}
+  .solution.show{display:block;}
+  .solution h4{margin:0 0 6px;font-size:0.8rem;color:var(--primary-dark);}
+  .solution ol{margin:0;padding-left:18px;}
+  .solution li{margin-bottom:4px;}
+  .solution .final{margin-top:8px;font-weight:800;color:var(--ok);}
+  .badge-open{display:inline-block;background:#fef3c7;color:#92400e;font-size:0.68rem;padding:2px 7px;border-radius:999px;font-weight:700;margin-left:6px;}
+  footer.foot{text-align:center;color:var(--muted);font-size:0.75rem;margin-top:30px;padding-top:16px;border-top:1px solid var(--border);}
+  #backTop{position:fixed;bottom:16px;right:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:none;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <h1 id="chapTitle">📘 <span id="chapTitleText"></span></h1>
+    <p><span id="formLevelText">Matematik Tingkatan 1</span> (KSSM) · Nota + Contoh + Latihan (<span id="soalanCountText">0</span> soalan)</p>
+    <div class="progresswrap"><div class="progressbar" id="progressbar"></div></div>
+    <div class="progresslabel"><span id="progressText">0 / 66 disemak</span><span id="scoreText">Skor: 0</span></div>
+  </header>
+  <div class="toc" id="toc"></div>
+  <div id="content"></div>
+  <footer class="foot">Latih Tubi Buku Teks <span id="formLevelFooterText">Matematik Tingkatan 1</span> · Dibina oleh Cg Din</footer>
+</div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+window.__CHAPTER_DATA__ = {"chapterCode": "4", "chapterTitle": "Poligon", "formLevel": "Matematik Tingkatan 2", "subtopics": [{"code": "4.1", "title": "4.1 Poligon Sekata", "notes": [{"heading": "⚠️ Sebahagian Soalan Perlu Buku Teks", "html": "Bab ini melibatkan rajah poligon dgn label sudut. Sebahagian latihan ditanda perlu rujuk rajah buku teks m.s. 54-73."}, {"heading": "Poligon Sekata dan Tak Sekata", "html": "<b>Poligon sekata</b>: SEMUA sisi sama panjang DAN semua sudut pedalaman sama saiz.<br><b>Poligon tak sekata</b>: TIDAK semua sisi sama panjang."}, {"heading": "Paksi Simetri", "html": "Bilangan paksi simetri poligon SEKATA = bilangan SISInya."}], "examples": [{"title": "Contoh 1", "q": "Tentukan poligon sekata/tak sekata bagi rajah dengan sudut 60° (segi tiga sama sisi) dan 120° (segi enam tak sekata).", "steps": ["Segi tiga sudut 60° tiap satu, sisi sama → SEKATA.", "Poligon dgn sudut tak sama saiz → TAK SEKATA."], "ans": "Bergantung sifat sisi & sudut rajah"}], "exercises": [{"group": "4.1a", "title": "JOM CUBA 4.1 — Poligon Sekata (Rujuk Rajah untuk Sebahagian)", "questions": [{"num": 1, "stem": "Tentukan sama ada setiap poligon berikut poligon SEKATA atau TAK SEKATA (rajah buku teks m.s. 60).", "parts": [{"label": "a", "ans": ["tak sekata"], "steps": []}, {"label": "b", "ans": ["tak sekata"], "steps": []}, {"label": "c", "ans": ["sekata"], "steps": []}, {"label": "d", "ans": ["tak sekata"], "steps": []}, {"label": "e", "ans": ["tak sekata"], "steps": []}, {"label": "f", "ans": ["tak sekata"], "steps": []}, {"label": "g", "ans": ["tak sekata"], "steps": []}, {"label": "h", "ans": ["tak sekata"], "steps": []}, {"label": "i", "ans": ["tak sekata"], "steps": []}], "open": false, "sample": null}, {"num": 2, "stem": "Bina poligon sekata berikut dengan pembaris dan jangka lukis: (a) segi tiga sama sisi 3.4cm (b) segi empat sama 3.6cm (c) heksagon sekata 4cm.", "parts": [], "open": true, "sample": "Latihan pembinaan — ikut langkah Aktiviti 1-3 buku teks m.s. 60 (bina bulatan/lengkok berjejari sama, sambungkan bucu)."}, {"num": 3, "stem": "Lengkapkan jadual: bilangan sisi poligon sekata dengan bilangan paksi simetrinya.\nSegi tiga sama sisi=? Segi empat sama=? Pentagon sekata=? Heksagon sekata=?", "parts": [{"label": null, "ans": ["3,4,5,6"], "steps": ["Bilangan paksi simetri poligon sekata = bilangan sisinya.", "Segi tiga=3, Segi empat=4, Pentagon=5, Heksagon=6."]}], "open": false, "sample": null}]}]}, {"code": "4.2", "title": "4.2 Sudut Pedalaman dan Sudut Peluaran Poligon", "notes": [{"heading": "Sudut Pedalaman", "html": "Sudut terbentuk oleh DUA SISI BERSEBELAHAN di dalam poligon.<br><b>Hasil tambah sudut pedalaman = (n-2) × 180°</b>, n=bilangan sisi.<br>Bagi poligon SEKATA: setiap sudut pedalaman = (n-2)×180°/n."}, {"heading": "Sudut Peluaran", "html": "Sudut terbentuk apabila satu sisi poligon DIPANJANGKAN. Penggenap kepada sudut pedalaman.<br><b>Hasil tambah sudut peluaran = 360°</b> (SENTIASA, tak kira bilangan sisi).<br>Bagi poligon SEKATA: setiap sudut peluaran = 360°/n."}, {"heading": "Hubungan Penting", "html": "Sudut Peluaran + Sudut Pedalaman = 180° (pada bucu yang sama)."}], "examples": [{"title": "Contoh 2", "q": "Nyatakan bilangan segi tiga bagi poligon 13 sisi dan 18 sisi.", "steps": ["(a) 13-2=11.", "(b) 18-2=16."], "ans": "(a) 11 (b) 16"}, {"title": "Contoh 3", "q": "Hitung x: pentagon dgn 100°,130°,60°,90° diberi.", "steps": ["Jumlah pedalaman=(5-2)×180=540°.", "x+100+130+60+90=540 → x=160°."], "ans": "160°"}, {"title": "Contoh 5", "q": "Hitung sudut pedalaman heksagon sekata.", "steps": ["Jumlah=(6-2)×180=720°. Setiap sudut=720/6=120°."], "ans": "120°"}, {"title": "Contoh 7", "q": "Hitung sudut peluaran oktagon sekata.", "steps": ["360/8=45°."], "ans": "45°"}, {"title": "Contoh 8", "q": "Hitung bilangan sisi poligon sekata dgn sudut pedalaman 108°.", "steps": ["Peluaran=180-108=72°. n=360/72=5."], "ans": "5 (pentagon)"}, {"title": "Contoh 9", "q": "Heksagon sekata dibesarkan drpd corak bola sepak. (a) Hitung y. (b) Beza y dgn (x+z), x=z=30°(sudut selang seli/sama kaki).", "steps": ["(a) y=(6-2)×180/6=120°.", "(b) y-(x+z)=120-(30+30)=60°."], "ans": "(a) 120° (b) 60°"}], "exercises": [{"group": "4.2a", "title": "JOM CUBA 4.2 — Sudut Pedalaman dan Sudut Peluaran", "questions": [{"num": 1, "stem": "Nyatakan bilangan segi tiga dan jumlah sudut pedalaman bagi:\nPentagon(5 sisi), Heksagon(6), Heptagon(7), Oktagon(8), Nonagon(9).", "parts": [{"label": "pentagon", "ans": ["3,540"], "steps": ["Bilangan segi tiga=n-2=3. Jumlah=3×180°=540°."]}, {"label": "heksagon", "ans": ["4,720"], "steps": ["n-2=4. Jumlah=4×180°=720°."]}, {"label": "heptagon", "ans": ["5,900"], "steps": ["n-2=5. Jumlah=5×180°=900°."]}, {"label": "oktagon", "ans": ["6,1080"], "steps": ["n-2=6. Jumlah=6×180°=1080°."]}, {"label": "nonagon", "ans": ["7,1260"], "steps": ["n-2=7. Jumlah=7×180°=1260°."]}], "open": false, "sample": null}, {"num": 2, "stem": "Namakan semua sudut pedalaman dan sudut peluaran bagi poligon berlabel a-h/a-j (rajah buku teks m.s. 66).", "parts": [{"label": "a", "ans": ["sudut pedalaman: a,b,c,d,e,f,g,h; sudut peluaran: tiada dilabel dalam rajah ini"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}, {"label": "b", "ans": ["sudut pedalaman: a,b,c,d,e,f,g,h,i,j"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}], "open": false, "sample": null}, {"num": 3, "stem": "Hitung nilai x bagi setiap poligon (a) 130°,80° diberi (b) 75°,85°,100° diberi (c) 70°,50°,112°,60° diberi (d) 76°,50° diberi.", "parts": [{"label": "a", "ans": ["150"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}, {"label": "b", "ans": ["100"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}, {"label": "c", "ans": ["68"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}, {"label": "d", "ans": ["54"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}], "open": false, "sample": null}, {"num": 4, "stem": "Hitung bilangan sisi bagi poligon sekata dengan (a) sudut peluaran 45° (b) sudut peluaran 36° (c) sudut pedalaman 140° (d) sudut pedalaman 150°.", "parts": [{"label": "a", "ans": ["8"], "steps": ["n=360/45=8."]}, {"label": "b", "ans": ["10"], "steps": ["n=360/36=10."]}, {"label": "c", "ans": ["9"], "steps": ["Sudut peluaran=180-140=40°. n=360/40=9."]}, {"label": "d", "ans": ["12"], "steps": ["Sudut peluaran=180-150=30°. n=360/30=12."]}], "open": false, "sample": null}, {"num": 5, "stem": "Zaidi ada kebun sayur berbentuk poligon sekata, sudut 150° ditunjukkan berkaitan sudut peluaran/pedalaman.\n(a) Apakah bentuk kebun (bilangan sisi)?\n(b) Hitung nilai y.", "parts": [{"label": "a", "ans": ["dodekagon (12 sisi)"], "steps": ["Jika sudut pedalaman=150°, sudut peluaran=30°, n=360/30=12."]}, {"label": "b", "ans": ["150"], "steps": ["y=sudut pedalaman=150° (mengikut konfigurasi rajah)."]}], "open": false, "sample": null}, {"num": 6, "stem": "Tentukan bilangan sisi poligon dengan jumlah sudut pedalaman (a) 900° (b) 1080° (c) 1260°.", "parts": [{"label": "a", "ans": ["7"], "steps": ["n-2=900/180=5 → n=7 (heptagon)."]}, {"label": "b", "ans": ["8"], "steps": ["n-2=6 → n=8 (oktagon)."]}, {"label": "c", "ans": ["9"], "steps": ["n-2=7 → n=9 (nonagon)."]}], "open": false, "sample": null}, {"num": 7, "stem": "Sudut peluaran poligon sekata=2h, sudut pedalaman=7h.\n(a) Hitung nilai h.\n(b) Hitung sudut pedalaman dan peluaran.\n(c) Hitung bilangan sisi dan namakan poligon.", "parts": [{"label": "a", "ans": ["20"], "steps": ["2h+7h=180° (penggenap) → 9h=180 → h=20°."]}, {"label": "b", "ans": ["pedalaman=140,peluaran=40"], "steps": ["Peluaran=2(20)=40°. Pedalaman=7(20)=140°."]}, {"label": "c", "ans": ["9, nonagon"], "steps": ["n=360/40=9 sisi = nonagon."]}], "open": false, "sample": null}, {"num": 8, "stem": "ABCDEFGH oktagon sekata, EFKLM pentagon sekata (rajah m.s. 70). Hitung ∠CBM.", "parts": [{"label": null, "ans": ["117"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)", "Sudut pedalaman oktagon=135°, pentagon=108°. Guna hubungan sudut sekeliling titik/garis lurus untuk cari ∠CBM."]}], "open": false, "sample": null}, {"num": 9, "stem": "Hasil tambah sudut pedalaman poligon sekata=2700°. Nyatakan bilangan sisi.", "parts": [{"label": null, "ans": ["17"], "steps": ["n-2=2700/180=15 → n=17."]}], "open": false, "sample": null}, {"num": 10, "stem": "Bahar ingin bina poligon dgn jumlah sudut pedalaman 300°. Bolehkah? Jelaskan.", "parts": [{"label": null, "ans": ["tidak boleh"], "steps": ["300=(n-2)×180 → n-2=1.67 (bukan integer).", "Bilangan sisi MESTI integer ≥3, maka poligon sebegini TIDAK WUJUD."]}], "open": false, "sample": null}]}]}], "review": {"title": "Latihan Tambahan — Ulang Kaji Bab 4", "exercises": [{"group": "Latihan Bab 4 (Bahagian B)", "title": "Latihan Tambahan — Ulang Kaji Bab 4", "questions": [{"num": 1, "stem": "Hitung nilai p+q+r (rajah m.s. 68, dgn 45°,80°,60° dan label serupa).", "parts": [{"label": null, "ans": ["215"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}], "open": false, "sample": null}, {"num": 2, "stem": "Hitung nilai x bagi poligon (120°,2x diberi).", "parts": [{"label": null, "ans": ["120"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}], "open": false, "sample": null}, {"num": 3, "stem": "Hitung nilai a+b+c (rajah dgn 60°,80° diberi).", "parts": [{"label": null, "ans": ["220"], "steps": ["(Nota: rujuk rajah asal buku teks untuk konfigurasi penuh.)"]}], "open": false, "sample": null}, {"num": 4, "stem": "Terangkan hubungan antara sudut peluaran dan sudut pedalaman sebarang poligon.", "parts": [], "open": true, "sample": "Sudut Peluaran + Sudut Pedalaman = 180° (penggenap), pada mana-mana bucu poligon."}, {"num": 5, "stem": "Rajah tunjuk sudut peluaran poligon sekata=2h, pedalaman=7h. Terangkan cara cari h TANPA melukis rajah.", "parts": [], "open": true, "sample": "Guna hubungan sudut peluaran+pedalaman=180°: 2h+7h=180° → 9h=180° → h=20°."}]}]}};
+(function(){
+"use strict";
+
+function normalize(s){
+  if (s === null || s === undefined) return "";
+  s = String(s).toLowerCase().trim();
+  s = s.replace(/rm/g,"").replace(/\s+/g,"").replace(/–/g,"-").replace(/—/g,"-");
+  s = s.replace(/≥/g,">=").replace(/≤/g,"<=").replace(/⩾/g,">=").replace(/⩽/g,"<=");
+  return s;
+}
+
+function toNumber(s){
+  s = normalize(s);
+  if (s === "") return null;
+  if (/^-?\d+\/\d+$/.test(s)){
+    var parts = s.split("/");
+    return parseFloat(parts[0])/parseFloat(parts[1]);
+  }
+  if (/^-?\d+(\.\d+)?$/.test(s)){
+    return parseFloat(s);
+  }
+  return null;
+}
+
+function fuzzyNumberMatch(input, accepted){
+  var vi = toNumber(input);
+  if (vi === null) return false;
+  for (var i=0;i<accepted.length;i++){
+    var va = toNumber(accepted[i]);
+    if (va !== null && Math.abs(vi - va) < 0.005) return true;
+  }
+  return false;
+}
+
+function checkPart(inputRaw, acceptedList){
+  var inputN = normalize(inputRaw);
+  if (inputN === "") return false;
+  for (var i=0;i<acceptedList.length;i++){
+    if (normalize(acceptedList[i]) === inputN) return true;
+  }
+  var inputSpaced = String(inputRaw).toLowerCase().trim().replace(/–/g,"-");
+  for (var j=0;j<acceptedList.length;j++){
+    if (String(acceptedList[j]).toLowerCase().trim() === inputSpaced) return true;
+  }
+  if (fuzzyNumberMatch(inputRaw, acceptedList)) return true;
+  return false;
+}
+
+var CHAPTER = window.__CHAPTER_DATA__;
+var totalQuestions = 0;
+var totalPartsCount = 0;
+CHAPTER.subtopics.forEach(function(st){
+  st.exercises.forEach(function(grp){
+    grp.questions.forEach(function(qq){
+      totalQuestions++;
+      totalPartsCount += qq.open ? 1 : qq.parts.length;
+    });
+  });
+});
+CHAPTER.review.exercises.forEach(function(grp){
+  grp.questions.forEach(function(qq){
+    totalQuestions++;
+    totalPartsCount += qq.open ? 1 : qq.parts.length;
+  });
+});
+
+var checkedCount = 0;
+var correctPartsCount = 0;
+
+function updateProgress(){
+  document.getElementById("progressText").textContent = checkedCount + " / " + totalQuestions + " disemak";
+  document.getElementById("scoreText").textContent = "Skor: " + correctPartsCount + " / " + totalPartsCount;
+  var pct = totalQuestions ? Math.round((checkedCount/totalQuestions)*100) : 0;
+  document.getElementById("progressbar").style.width = pct + "%";
+}
+
+function nl2br(s){ return s.replace(/\n/g,"<br>"); }
+
+function buildToc(){
+  var toc = document.getElementById("toc");
+  CHAPTER.subtopics.forEach(function(st){
+    var btn = document.createElement("button");
+    btn.textContent = st.code;
+    btn.onclick = function(){ document.getElementById("st-"+st.code).scrollIntoView({behavior:"smooth", block:"start"}); };
+    toc.appendChild(btn);
+  });
+  var btn2 = document.createElement("button");
+  btn2.textContent = "Praktis";
+  btn2.onclick = function(){ document.getElementById("review-sec").scrollIntoView({behavior:"smooth", block:"start"}); };
+  toc.appendChild(btn2);
+}
+
+var qCounter = 0;
+function renderExerciseGroup(grp, htmlArr){
+  htmlArr.push('<div class="grouptitle">'+grp.title+'</div>');
+  grp.questions.forEach(function(qq){
+    var qid = "q"+(qCounter++);
+    htmlArr.push('<div class="qcard" id="card-'+qid+'">');
+    htmlArr.push('<div class="qhead"><span class="qnum">Soalan '+qq.num+'</span><span class="qstatus" id="status-'+qid+'"></span></div>');
+    htmlArr.push('<div class="stem">'+nl2br(qq.stem)+(qq.open?'<span class="badge-open">Jawapan Terbuka</span>':'')+'</div>');
+    if (qq.open){
+      htmlArr.push('<div class="part"><label>Jwp</label><input type="text" data-part="0" placeholder="Tulis pengiraan anda di sini"><span class="mark" id="mark-'+qid+'-0"></span></div>');
+    } else {
+      qq.parts.forEach(function(pp, pi){
+        var lbl = pp.label ? "("+pp.label+")" : "Jwp";
+        htmlArr.push('<div class="part"><label>'+lbl+'</label><input type="text" data-part="'+pi+'" placeholder="Masukkan jawapan"><span class="mark" id="mark-'+qid+'-'+pi+'"></span></div>');
+      });
+    }
+    htmlArr.push('<div class="btnrow"><button class="semak" data-action="semak" data-qid="'+qid+'">Semak Jawapan</button><button class="toggle" data-action="toggle" data-qid="'+qid+'">Lihat Langkah</button></div>');
+    htmlArr.push('<div class="solution" id="sol-'+qid+'">');
+    if (qq.open){
+      htmlArr.push('<h4>Contoh Jawapan (jawapan lain yang sah turut diterima)</h4><p>'+qq.sample+'</p>');
+    } else {
+      qq.parts.forEach(function(pp){
+        var lbl = pp.label ? "("+pp.label+")" : "";
+        htmlArr.push('<h4>Langkah Penyelesaian '+lbl+'</h4><ol>');
+        pp.steps.forEach(function(st){ htmlArr.push('<li>'+st+'</li>'); });
+        htmlArr.push('</ol><div class="final">Jawapan: '+pp.ans[0]+'</div>');
+      });
+    }
+    htmlArr.push('</div>'); // solution
+    htmlArr.push('</div>'); // qcard
+    QMAP[qid] = qq;
+  });
+}
+
+var QMAP = {};
+
+function setTitles(){
+  var formLevel = CHAPTER.formLevel || "Matematik Tingkatan 1";
+  var t = "Bab " + CHAPTER.chapterCode + " — " + CHAPTER.chapterTitle;
+  document.getElementById("chapTitleText").textContent = t;
+  document.getElementById("pageTitle").textContent = t + " | " + formLevel;
+  var flEl = document.getElementById("formLevelText");
+  if (flEl) flEl.textContent = formLevel;
+  var flFoot = document.getElementById("formLevelFooterText");
+  if (flFoot) flFoot.textContent = formLevel;
+  var scEl = document.getElementById("soalanCountText");
+  if (scEl) scEl.textContent = totalQuestions;
+}
+
+function render(){
+  setTitles();
+  var htmlArr = [];
+  CHAPTER.subtopics.forEach(function(st){
+    htmlArr.push('<section class="subtopic" id="st-'+st.code+'"><h2>'+st.title+'</h2>');
+    st.notes.forEach(function(n){
+      htmlArr.push('<div class="notabox"><h3>📝 Nota — '+n.heading+'</h3><div>'+n.html+'</div></div>');
+    });
+    st.examples.forEach(function(ex){
+      htmlArr.push('<div class="contohbox"><h3>📖 '+ex.title+'</h3><div class="q">'+nl2br(ex.q)+'</div><ol>');
+      ex.steps.forEach(function(s){ htmlArr.push('<li>'+s+'</li>'); });
+      htmlArr.push('</ol><div class="final">Jawapan: '+ex.ans+'</div></div>');
+    });
+    htmlArr.push('<h3 class="latihan-head">✏️ Latihan</h3>');
+    st.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+    htmlArr.push('</section>');
+  });
+  htmlArr.push('<section class="subtopic" id="review-sec"><h2>'+CHAPTER.review.title+'</h2><h3 class="latihan-head">✏️ Latihan Ulang Kaji</h3>');
+  CHAPTER.review.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+  htmlArr.push('</section>');
+  document.getElementById("content").innerHTML = htmlArr.join("");
+}
+
+function onSemak(qid){
+  var qq = QMAP[qid];
+  var card = document.getElementById("card-"+qid);
+  var alreadyChecked = card.getAttribute("data-checked") === "1";
+
+  if (qq.open){
+    var inp = card.querySelector('input[data-part="0"]');
+    var val = inp.value.trim();
+    var mark = document.getElementById("mark-"+qid+"-0");
+    if (val.length > 0){ mark.textContent = "✅"; inp.classList.add("correct"); } else { mark.textContent = ""; }
+    document.getElementById("sol-"+qid).classList.add("show");
+    if (!alreadyChecked){
+      checkedCount++; correctPartsCount += 1; card.setAttribute("data-checked","1"); updateProgress();
+    }
+    document.getElementById("status-"+qid).textContent = "📝";
+    return;
+  }
+
+  var allCorrect = true, correctHere = 0;
+  qq.parts.forEach(function(pp, pi){
+    var inp = card.querySelector('input[data-part="'+pi+'"]');
+    var mark = document.getElementById("mark-"+qid+"-"+pi);
+    var ok = checkPart(inp.value, pp.ans);
+    inp.classList.remove("correct","wrong");
+    if (ok){ inp.classList.add("correct"); mark.textContent = "✅"; correctHere++; }
+    else { inp.classList.add("wrong"); mark.textContent = "❌"; allCorrect = false; }
+  });
+
+  document.getElementById("sol-"+qid).classList.add("show");
+  document.getElementById("status-"+qid).textContent = allCorrect ? "✅" : "❌";
+
+  if (!alreadyChecked){
+    checkedCount++; correctPartsCount += correctHere;
+    card.setAttribute("data-checked","1"); card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  } else {
+    var prevCorrect = parseInt(card.getAttribute("data-correct-count")||"0",10);
+    correctPartsCount += (correctHere - prevCorrect);
+    card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  }
+}
+
+function onToggle(qid){
+  document.getElementById("sol-"+qid).classList.toggle("show");
+}
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (t.matches('button[data-action="semak"]')) onSemak(t.getAttribute("data-qid"));
+  else if (t.matches('button[data-action="toggle"]')) onToggle(t.getAttribute("data-qid"));
+});
+
+window.addEventListener("scroll", function(){
+  document.getElementById("backTop").style.display = window.scrollY > 400 ? "block" : "none";
+});
+
+buildToc();
+render();
+updateProgress();
+
+})();
+
+</script>
+</body>
+</html>

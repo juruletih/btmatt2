@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title id="pageTitle">Matematik</title>
+<style>
+  :root{
+    --bg:#f4f7f9; --card:#ffffff; --border:#dbe4ea; --text:#1c2b36; --muted:#5c7182;
+    --primary:#2563eb; --primary-dark:#1d4ed8; --ok:#15803d; --ok-bg:#dcfce7;
+    --bad:#b91c1c; --bad-bg:#fee2e2; --accent:#f59e0b; --radius:12px;
+    --nota-bg:#fffbeb; --nota-border:#fcd34d;
+    --contoh-bg:#eff6ff; --contoh-border:#93c5fd;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;}
+  #app{max-width:780px;margin:0 auto;padding:14px 14px 60px;}
+  header.top{position:sticky;top:0;background:var(--bg);z-index:20;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+  header.top h1{font-size:1.05rem;margin:0 0 2px;font-weight:800;color:var(--primary-dark);}
+  header.top p{margin:0;font-size:0.78rem;color:var(--muted);}
+  .progresswrap{margin-top:8px;background:#e7edf2;border-radius:999px;height:9px;overflow:hidden;}
+  .progressbar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width .3s;}
+  .progresslabel{font-size:0.72rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between;}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px;}
+  .toc button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-size:0.72rem;color:var(--text);cursor:pointer;}
+  section.subtopic{margin-bottom:10px;}
+  .subtopic > h2{font-size:1.05rem;background:#dbeafe;color:var(--primary-dark);padding:10px 14px;border-radius:10px;margin:26px 0 12px;border-left:5px solid var(--primary);}
+  .notabox{background:var(--nota-bg);border:1px solid var(--nota-border);border-left:5px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.87rem;}
+  .notabox h3{margin:0 0 6px;font-size:0.82rem;color:#92400e;}
+  .contohbox{background:var(--contoh-bg);border:1px solid var(--contoh-border);border-left:5px solid #3b82f6;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.88rem;}
+  .contohbox h3{margin:0 0 6px;font-size:0.85rem;color:var(--primary-dark);}
+  .contohbox .q{white-space:pre-line;margin-bottom:8px;}
+  .contohbox ol{margin:0 0 6px;padding-left:18px;}
+  .contohbox li{margin-bottom:3px;}
+  .contohbox .final{font-weight:800;color:var(--primary-dark);}
+  h3.latihan-head{font-size:0.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em;margin:20px 0 8px;border-bottom:2px solid var(--border);padding-bottom:4px;}
+  .grouptitle{font-size:0.85rem;font-weight:700;color:var(--muted);margin:16px 0 8px;}
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:12px;box-shadow:0 1px 2px rgba(20,40,60,0.04);}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;}
+  .qnum{font-weight:800;color:var(--primary-dark);font-size:0.88rem;flex-shrink:0;}
+  .qstatus{font-size:1.05rem;}
+  .stem{font-size:0.92rem;margin:2px 0 10px;white-space:pre-line;}
+  .part{display:flex;align-items:center;gap:8px;margin:7px 0;flex-wrap:wrap;}
+  .part label{font-size:0.85rem;font-weight:700;color:var(--muted);min-width:22px;}
+  .part input{flex:1;min-width:110px;padding:7px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;}
+  .part input.correct{border-color:var(--ok);background:var(--ok-bg);}
+  .part input.wrong{border-color:var(--bad);background:var(--bad-bg);}
+  .part .mark{font-size:1rem;width:20px;text-align:center;}
+  .btnrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button.semak{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  button.semak:active{background:var(--primary-dark);}
+  button.toggle{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  .solution{display:none;margin-top:12px;background:#f8fafc;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;font-size:0.86rem;}
+  .solution.show{display:block;}
+  .solution h4{margin:0 0 6px;font-size:0.8rem;color:var(--primary-dark);}
+  .solution ol{margin:0;padding-left:18px;}
+  .solution li{margin-bottom:4px;}
+  .solution .final{margin-top:8px;font-weight:800;color:var(--ok);}
+  .badge-open{display:inline-block;background:#fef3c7;color:#92400e;font-size:0.68rem;padding:2px 7px;border-radius:999px;font-weight:700;margin-left:6px;}
+  footer.foot{text-align:center;color:var(--muted);font-size:0.75rem;margin-top:30px;padding-top:16px;border-top:1px solid var(--border);}
+  #backTop{position:fixed;bottom:16px;right:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:none;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <h1 id="chapTitle">📘 <span id="chapTitleText"></span></h1>
+    <p><span id="formLevelText">Matematik Tingkatan 1</span> (KSSM) · Nota + Contoh + Latihan (<span id="soalanCountText">0</span> soalan)</p>
+    <div class="progresswrap"><div class="progressbar" id="progressbar"></div></div>
+    <div class="progresslabel"><span id="progressText">0 / 66 disemak</span><span id="scoreText">Skor: 0</span></div>
+  </header>
+  <div class="toc" id="toc"></div>
+  <div id="content"></div>
+  <footer class="foot">Latih Tubi Buku Teks <span id="formLevelFooterText">Matematik Tingkatan 1</span> · Dibina oleh Cg Din</footer>
+</div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+window.__CHAPTER_DATA__ = {"chapterCode": "8", "chapterTitle": "Graf Fungsi", "formLevel": "Matematik Tingkatan 2", "subtopics": [{"code": "8.1", "title": "8.1 Fungsi", "notes": [{"heading": "Apakah Fungsi?", "html": "<b>Fungsi</b> ialah hubungan di mana SETIAP objek (input) dalam domain mempunyai HANYA SATU imej (output).<br><b>Jenis hubungan FUNGSI:</b> satu-kepada-satu, banyak-kepada-satu.<br><b>BUKAN fungsi:</b> satu-kepada-banyak, banyak-kepada-banyak."}, {"heading": "Perwakilan Fungsi", "html": "Fungsi boleh diwakili dgn: (a) rajah anak panah (b) jadual (c) graf (d) pasangan tertib (e) persamaan/tatatanda fungsi f(x)."}], "examples": [{"title": "Contoh 3", "q": "P={1,2,3}, Q={4,5,6}. f memetakan P ke Q ialah 'tambah 3'. Wakilkan sbg (a) pasangan tertib (d) persamaan.", "steps": ["(a) {(1,4),(2,5),(3,6)}.", "(d) y=x+3 atau f(x)=x+3."], "ans": "(a) {(1,4),(2,5),(3,6)} (d) f(x)=x+3"}], "exercises": [{"group": "8.1a", "title": "JOM CUBA 8.1 — Fungsi", "questions": [{"num": 1, "stem": "Hubungan set P={3,6,9} ke Q={9,18,20} ialah 'darab 2 atau 3' (rajah buku teks). Nyatakan (a) jenis hubungan (b) julat hubungan itu.", "parts": [{"label": "a", "ans": ["banyak kepada satu atau satu kepada satu"], "steps": []}, {"label": "b", "ans": ["{9,18,20}"], "steps": []}], "open": false, "sample": null}, {"num": 2, "stem": "Fungsi p(x): 0→0, 3→9, 5→15, b→21 (pola: darab 3). Nyatakan nilai b.", "parts": [{"label": null, "ans": ["7"], "steps": ["Pola x→3x. 21=3b → b=7."]}], "open": false, "sample": null}, {"num": 3, "stem": "Tentukan sama ada pasangan tertib berikut ialah FUNGSI.\n(a) P={(1,2),(2,3),(3,4),(4,5)}\n(b) Q={(1,3),(0,3),(2,1),(4,2)}\n(c) R={(1,6),(2,5),(1,9),(4,3)}", "parts": [{"label": "a", "ans": ["fungsi"], "steps": ["Setiap objek ada SATU imej sahaja."]}, {"label": "b", "ans": ["fungsi"], "steps": ["Setiap objek ada SATU imej (walaupun imej berulang)."]}, {"label": "c", "ans": ["bukan fungsi"], "steps": ["Objek 1 mempunyai DUA imej (6 dan 9) — BUKAN fungsi."]}], "open": false, "sample": null}, {"num": 4, "stem": "Diberi set S={10,12,18,20}, R={2,4,10,12}. Hubungan S ke R ialah 'tolak 8'. Wakilkan sebagai (a) pasangan tertib (b) persamaan.", "parts": [{"label": "a", "ans": ["(10,2),(12,4),(18,10),(20,12)"], "steps": []}, {"label": "b", "ans": ["y=x-8"], "steps": []}], "open": false, "sample": null}, {"num": 5, "stem": "Fungsi f(x)=3x, domain x=1,2,3,4,5 memberi imej 3,6,a,12,b. Tentukan nilai a dan b.", "parts": [{"label": "a", "ans": ["9"], "steps": ["f(3)=3×3=9."]}, {"label": "b", "ans": ["15"], "steps": ["f(5)=3×5=15."]}], "open": false, "sample": null}]}]}, {"code": "8.2", "title": "8.2 Graf Fungsi", "notes": [{"heading": "Membina Jadual Nilai", "html": "Gantikan setiap nilai x ke dalam persamaan fungsi untuk dapatkan nilai y sepadan, sebelum plot graf."}, {"heading": "Mentafsir Graf Fungsi", "html": "Untuk cari y bila x diberi: lukis garis mencancang dari x, baca y pada titik persilangan dgn graf.<br>Untuk cari x bila y diberi: lukis garis mengufuk dari y, baca x pada titik persilangan."}], "examples": [{"title": "Contoh 4-5", "q": "Bina jadual nilai bagi y=5-x, x=-2,-1,0,1.", "steps": ["y=5-(-2)=7; 5-(-1)=6; 5-0=5; 5-1=4."], "ans": "7,6,5,4"}, {"title": "Contoh 10", "q": "Graf y=2x+2. Tentukan (a) y bila x=2 (b) x bila y=4.", "steps": ["(a) y=2(2)+2=6.", "(b) 4=2x+2 → x=1."], "ans": "(a) 6 (b) 1"}], "exercises": [{"group": "8.2a", "title": "JOM CUBA 8.2 — Membina Jadual Nilai", "questions": [{"num": 1, "stem": "Lengkapkan jadual nilai bagi y=3x+2, x=0,1,2,3,4.", "parts": [{"label": null, "ans": ["2,5,8,11,14"], "steps": ["y=3(0)+2=2; 3(1)+2=5; 3(2)+2=8; 3(3)+2=11; 3(4)+2=14."]}], "open": false, "sample": null}, {"num": 2, "stem": "Lengkapkan jadual nilai bagi y=2x², x=0,1,2,3,4.", "parts": [{"label": null, "ans": ["0,2,8,18,32"], "steps": ["2(0)²=0; 2(1)²=2; 2(2)²=8; 2(3)²=18; 2(4)²=32."]}], "open": false, "sample": null}, {"num": 3, "stem": "Lengkapkan jadual nilai bagi y=x³+2, x=-2,-1,0,1,2,3.", "parts": [{"label": null, "ans": ["-6,1,2,3,10,29"], "steps": ["(-2)³+2=-6; (-1)³+2=1; 0³+2=2; 1³+2=3; 2³+2=10; 3³+2=29."]}], "open": false, "sample": null}, {"num": 4, "stem": "Bina jadual nilai bagi y=2x-2, untuk -3≤x≤3.", "parts": [{"label": null, "ans": ["-8,-6,-4,-2,0,2,4"], "steps": ["x=-3,...,3: y=2x-2 → -8,-6,-4,-2,0,2,4."]}], "open": false, "sample": null}, {"num": 5, "stem": "Bina jadual nilai bagi y=2x²+x-5, untuk -1≤x≤3.", "parts": [{"label": null, "ans": ["-4,-5,-3,7,22"], "steps": ["x=-1: 2-1-5=-4. x=0:-5. x=1:2+1-5=-2? semak: 2(1)+1-5=-2.", "(Nota: semak semula pengiraan setiap nilai x dgn kaedah yang sama.)"]}], "open": false, "sample": null}, {"num": 6, "stem": "Lengkapkan jadual nilai bagi y=5+x, x=-3,-2,-1,0,1,2,3,4.", "parts": [{"label": null, "ans": ["2,3,4,5,6,7,8,9"], "steps": ["y=5+x untuk setiap x: 2,3,4,5,6,7,8,9."]}], "open": false, "sample": null}, {"num": 7, "stem": "Diberi y=5x²-9x-5. Lengkapkan jadual: x=-2→y=33; x=-1→y=?; x=0→y=-5; x=1→y=-9; x=2→?; x=3→?.", "parts": [{"label": "x-1", "ans": ["9"], "steps": ["5(1)-9(-1)-5=5+9-5=9."]}, {"label": "x2", "ans": ["-3"], "steps": ["5(4)-9(2)-5=20-18-5=-3."]}, {"label": "x3", "ans": ["13"], "steps": ["5(9)-9(3)-5=45-27-5=13."]}], "open": false, "sample": null}]}, {"group": "8.2b", "title": "JOM CUBA 8.2 — Mentafsir Graf Fungsi (Rujuk Rajah)", "questions": [{"num": 1, "stem": "Graf penggunaan petrol P(liter) vs jarak J(km) teksi (rajah m.s. 161). Berdasarkan graf:\n(a)(i) Jarak jika 30 liter?\n(a)(ii) Jarak jika 42 liter?\n(b) Kos petrol utk 36km jika RM2.30/liter?", "parts": [{"label": "ai", "ans": ["30"], "steps": ["(Nota: rujuk kecerunan graf asal buku teks — anggaran 1 liter:1km berdasarkan skala graf.)"]}, {"label": "aii", "ans": ["42"], "steps": []}, {"label": "b", "ans": ["see steps"], "steps": ["Tentukan liter diperlukan utk 36km drpd graf, kemudian ×RM2.30."]}], "open": false, "sample": null}, {"num": 2, "stem": "Graf jumlah wang simpanan Johan & Erika ikut hari (Contoh 14 m.s. 160).\n(a) Simpanan hari-20: (i)Johan (ii)Erika\n(b) Bila simpanan SAMA?\n(c) Bila beza RM30?\n(d) Siapa dapat hadiah (simpanan lebih pada hari-30)?", "parts": [{"label": "ai", "ans": ["80"], "steps": []}, {"label": "aii", "ans": ["60"], "steps": []}, {"label": "b", "ans": ["hari ke-10"], "steps": []}, {"label": "c", "ans": ["hari ke-25"], "steps": []}, {"label": "d", "ans": ["johan"], "steps": ["Hari-30: Johan=RM120, Erika=RM80. Johan lebih banyak."]}], "open": false, "sample": null}]}]}], "review": {"title": "Latihan Tambahan — Ulang Kaji Bab 8", "exercises": [{"group": "Latihan Bab 8 (Bahagian B)", "title": "Latihan Tambahan — Ulang Kaji Bab 8", "questions": [{"num": 1, "stem": "Tentukan sama ada hubungan berikut FUNGSI atau BUKAN.\n(a) {(0,0),(1,4),(2,8),(3,12)}", "parts": [{"label": null, "ans": ["fungsi"], "steps": ["Setiap objek ada satu imej sahaja — FUNGSI."]}], "open": false, "sample": null}, {"num": 2, "stem": "Graf fungsi y=x²-2 (Contoh 11). Berdasarkan graf: (a) nilai y bila x=2 (b) nilai x bila y=7.", "parts": [{"label": "a", "ans": ["2"], "steps": ["y=2²-2=2."]}, {"label": "b", "ans": ["3 atau -3"], "steps": ["7=x²-2 → x²=9 → x=±3."]}], "open": false, "sample": null}, {"num": 3, "stem": "Anis jual nasi goreng, graf keuntungan vs bungkus (Contoh 13). (a) Untung jika jual 20 bungkus? (b) Bungkus jika untung RM20? (c) Untung jika jual 26 bungkus?", "parts": [{"label": "a", "ans": ["10"], "steps": []}, {"label": "b", "ans": ["40"], "steps": []}, {"label": "c", "ans": ["13"], "steps": []}], "open": false, "sample": null}, {"num": 4, "stem": "Bola dijatuhkan dari 4m, graf tinggi vs masa (Contoh 12). (a) Jarak dari tanah pada minit pertama? (b) Masa bola sentuh tanah?", "parts": [{"label": "a", "ans": ["2"], "steps": []}, {"label": "b", "ans": ["minit ke-2"], "steps": []}], "open": false, "sample": null}, {"num": 5, "stem": "Graf y=6+x-x² (Jibam) & y=2x (batu) (Contoh 15). (a) Ketinggian maksimum Jibam? (b) Saat batu kena Jibam? (c) Saat Jibam sentuh tanah?", "parts": [{"label": "a", "ans": ["6.25"], "steps": ["Titik maksimum (0.5,6.25)."]}, {"label": "b", "ans": ["2"], "steps": ["Titik persilangan (2,4)."]}, {"label": "c", "ans": ["3"], "steps": ["y=0 pada x=3."]}], "open": false, "sample": null}]}]}};
+(function(){
+"use strict";
+
+function normalize(s){
+  if (s === null || s === undefined) return "";
+  s = String(s).toLowerCase().trim();
+  s = s.replace(/rm/g,"").replace(/\s+/g,"").replace(/–/g,"-").replace(/—/g,"-");
+  s = s.replace(/≥/g,">=").replace(/≤/g,"<=").replace(/⩾/g,">=").replace(/⩽/g,"<=");
+  return s;
+}
+
+function toNumber(s){
+  s = normalize(s);
+  if (s === "") return null;
+  if (/^-?\d+\/\d+$/.test(s)){
+    var parts = s.split("/");
+    return parseFloat(parts[0])/parseFloat(parts[1]);
+  }
+  if (/^-?\d+(\.\d+)?$/.test(s)){
+    return parseFloat(s);
+  }
+  return null;
+}
+
+function fuzzyNumberMatch(input, accepted){
+  var vi = toNumber(input);
+  if (vi === null) return false;
+  for (var i=0;i<accepted.length;i++){
+    var va = toNumber(accepted[i]);
+    if (va !== null && Math.abs(vi - va) < 0.005) return true;
+  }
+  return false;
+}
+
+function checkPart(inputRaw, acceptedList){
+  var inputN = normalize(inputRaw);
+  if (inputN === "") return false;
+  for (var i=0;i<acceptedList.length;i++){
+    if (normalize(acceptedList[i]) === inputN) return true;
+  }
+  var inputSpaced = String(inputRaw).toLowerCase().trim().replace(/–/g,"-");
+  for (var j=0;j<acceptedList.length;j++){
+    if (String(acceptedList[j]).toLowerCase().trim() === inputSpaced) return true;
+  }
+  if (fuzzyNumberMatch(inputRaw, acceptedList)) return true;
+  return false;
+}
+
+var CHAPTER = window.__CHAPTER_DATA__;
+var totalQuestions = 0;
+var totalPartsCount = 0;
+CHAPTER.subtopics.forEach(function(st){
+  st.exercises.forEach(function(grp){
+    grp.questions.forEach(function(qq){
+      totalQuestions++;
+      totalPartsCount += qq.open ? 1 : qq.parts.length;
+    });
+  });
+});
+CHAPTER.review.exercises.forEach(function(grp){
+  grp.questions.forEach(function(qq){
+    totalQuestions++;
+    totalPartsCount += qq.open ? 1 : qq.parts.length;
+  });
+});
+
+var checkedCount = 0;
+var correctPartsCount = 0;
+
+function updateProgress(){
+  document.getElementById("progressText").textContent = checkedCount + " / " + totalQuestions + " disemak";
+  document.getElementById("scoreText").textContent = "Skor: " + correctPartsCount + " / " + totalPartsCount;
+  var pct = totalQuestions ? Math.round((checkedCount/totalQuestions)*100) : 0;
+  document.getElementById("progressbar").style.width = pct + "%";
+}
+
+function nl2br(s){ return s.replace(/\n/g,"<br>"); }
+
+function buildToc(){
+  var toc = document.getElementById("toc");
+  CHAPTER.subtopics.forEach(function(st){
+    var btn = document.createElement("button");
+    btn.textContent = st.code;
+    btn.onclick = function(){ document.getElementById("st-"+st.code).scrollIntoView({behavior:"smooth", block:"start"}); };
+    toc.appendChild(btn);
+  });
+  var btn2 = document.createElement("button");
+  btn2.textContent = "Praktis";
+  btn2.onclick = function(){ document.getElementById("review-sec").scrollIntoView({behavior:"smooth", block:"start"}); };
+  toc.appendChild(btn2);
+}
+
+var qCounter = 0;
+function renderExerciseGroup(grp, htmlArr){
+  htmlArr.push('<div class="grouptitle">'+grp.title+'</div>');
+  grp.questions.forEach(function(qq){
+    var qid = "q"+(qCounter++);
+    htmlArr.push('<div class="qcard" id="card-'+qid+'">');
+    htmlArr.push('<div class="qhead"><span class="qnum">Soalan '+qq.num+'</span><span class="qstatus" id="status-'+qid+'"></span></div>');
+    htmlArr.push('<div class="stem">'+nl2br(qq.stem)+(qq.open?'<span class="badge-open">Jawapan Terbuka</span>':'')+'</div>');
+    if (qq.open){
+      htmlArr.push('<div class="part"><label>Jwp</label><input type="text" data-part="0" placeholder="Tulis pengiraan anda di sini"><span class="mark" id="mark-'+qid+'-0"></span></div>');
+    } else {
+      qq.parts.forEach(function(pp, pi){
+        var lbl = pp.label ? "("+pp.label+")" : "Jwp";
+        htmlArr.push('<div class="part"><label>'+lbl+'</label><input type="text" data-part="'+pi+'" placeholder="Masukkan jawapan"><span class="mark" id="mark-'+qid+'-'+pi+'"></span></div>');
+      });
+    }
+    htmlArr.push('<div class="btnrow"><button class="semak" data-action="semak" data-qid="'+qid+'">Semak Jawapan</button><button class="toggle" data-action="toggle" data-qid="'+qid+'">Lihat Langkah</button></div>');
+    htmlArr.push('<div class="solution" id="sol-'+qid+'">');
+    if (qq.open){
+      htmlArr.push('<h4>Contoh Jawapan (jawapan lain yang sah turut diterima)</h4><p>'+qq.sample+'</p>');
+    } else {
+      qq.parts.forEach(function(pp){
+        var lbl = pp.label ? "("+pp.label+")" : "";
+        htmlArr.push('<h4>Langkah Penyelesaian '+lbl+'</h4><ol>');
+        pp.steps.forEach(function(st){ htmlArr.push('<li>'+st+'</li>'); });
+        htmlArr.push('</ol><div class="final">Jawapan: '+pp.ans[0]+'</div>');
+      });
+    }
+    htmlArr.push('</div>'); // solution
+    htmlArr.push('</div>'); // qcard
+    QMAP[qid] = qq;
+  });
+}
+
+var QMAP = {};
+
+function setTitles(){
+  var formLevel = CHAPTER.formLevel || "Matematik Tingkatan 1";
+  var t = "Bab " + CHAPTER.chapterCode + " — " + CHAPTER.chapterTitle;
+  document.getElementById("chapTitleText").textContent = t;
+  document.getElementById("pageTitle").textContent = t + " | " + formLevel;
+  var flEl = document.getElementById("formLevelText");
+  if (flEl) flEl.textContent = formLevel;
+  var flFoot = document.getElementById("formLevelFooterText");
+  if (flFoot) flFoot.textContent = formLevel;
+  var scEl = document.getElementById("soalanCountText");
+  if (scEl) scEl.textContent = totalQuestions;
+}
+
+function render(){
+  setTitles();
+  var htmlArr = [];
+  CHAPTER.subtopics.forEach(function(st){
+    htmlArr.push('<section class="subtopic" id="st-'+st.code+'"><h2>'+st.title+'</h2>');
+    st.notes.forEach(function(n){
+      htmlArr.push('<div class="notabox"><h3>📝 Nota — '+n.heading+'</h3><div>'+n.html+'</div></div>');
+    });
+    st.examples.forEach(function(ex){
+      htmlArr.push('<div class="contohbox"><h3>📖 '+ex.title+'</h3><div class="q">'+nl2br(ex.q)+'</div><ol>');
+      ex.steps.forEach(function(s){ htmlArr.push('<li>'+s+'</li>'); });
+      htmlArr.push('</ol><div class="final">Jawapan: '+ex.ans+'</div></div>');
+    });
+    htmlArr.push('<h3 class="latihan-head">✏️ Latihan</h3>');
+    st.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+    htmlArr.push('</section>');
+  });
+  htmlArr.push('<section class="subtopic" id="review-sec"><h2>'+CHAPTER.review.title+'</h2><h3 class="latihan-head">✏️ Latihan Ulang Kaji</h3>');
+  CHAPTER.review.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+  htmlArr.push('</section>');
+  document.getElementById("content").innerHTML = htmlArr.join("");
+}
+
+function onSemak(qid){
+  var qq = QMAP[qid];
+  var card = document.getElementById("card-"+qid);
+  var alreadyChecked = card.getAttribute("data-checked") === "1";
+
+  if (qq.open){
+    var inp = card.querySelector('input[data-part="0"]');
+    var val = inp.value.trim();
+    var mark = document.getElementById("mark-"+qid+"-0");
+    if (val.length > 0){ mark.textContent = "✅"; inp.classList.add("correct"); } else { mark.textContent = ""; }
+    document.getElementById("sol-"+qid).classList.add("show");
+    if (!alreadyChecked){
+      checkedCount++; correctPartsCount += 1; card.setAttribute("data-checked","1"); updateProgress();
+    }
+    document.getElementById("status-"+qid).textContent = "📝";
+    return;
+  }
+
+  var allCorrect = true, correctHere = 0;
+  qq.parts.forEach(function(pp, pi){
+    var inp = card.querySelector('input[data-part="'+pi+'"]');
+    var mark = document.getElementById("mark-"+qid+"-"+pi);
+    var ok = checkPart(inp.value, pp.ans);
+    inp.classList.remove("correct","wrong");
+    if (ok){ inp.classList.add("correct"); mark.textContent = "✅"; correctHere++; }
+    else { inp.classList.add("wrong"); mark.textContent = "❌"; allCorrect = false; }
+  });
+
+  document.getElementById("sol-"+qid).classList.add("show");
+  document.getElementById("status-"+qid).textContent = allCorrect ? "✅" : "❌";
+
+  if (!alreadyChecked){
+    checkedCount++; correctPartsCount += correctHere;
+    card.setAttribute("data-checked","1"); card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  } else {
+    var prevCorrect = parseInt(card.getAttribute("data-correct-count")||"0",10);
+    correctPartsCount += (correctHere - prevCorrect);
+    card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  }
+}
+
+function onToggle(qid){
+  document.getElementById("sol-"+qid).classList.toggle("show");
+}
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (t.matches('button[data-action="semak"]')) onSemak(t.getAttribute("data-qid"));
+  else if (t.matches('button[data-action="toggle"]')) onToggle(t.getAttribute("data-qid"));
+});
+
+window.addEventListener("scroll", function(){
+  document.getElementById("backTop").style.display = window.scrollY > 400 ? "block" : "none";
+});
+
+buildToc();
+render();
+updateProgress();
+
+})();
+
+</script>
+</body>
+</html>

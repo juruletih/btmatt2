@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title id="pageTitle">Matematik</title>
+<style>
+  :root{
+    --bg:#f4f7f9; --card:#ffffff; --border:#dbe4ea; --text:#1c2b36; --muted:#5c7182;
+    --primary:#2563eb; --primary-dark:#1d4ed8; --ok:#15803d; --ok-bg:#dcfce7;
+    --bad:#b91c1c; --bad-bg:#fee2e2; --accent:#f59e0b; --radius:12px;
+    --nota-bg:#fffbeb; --nota-border:#fcd34d;
+    --contoh-bg:#eff6ff; --contoh-border:#93c5fd;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;}
+  #app{max-width:780px;margin:0 auto;padding:14px 14px 60px;}
+  header.top{position:sticky;top:0;background:var(--bg);z-index:20;padding:10px 0 8px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+  header.top h1{font-size:1.05rem;margin:0 0 2px;font-weight:800;color:var(--primary-dark);}
+  header.top p{margin:0;font-size:0.78rem;color:var(--muted);}
+  .progresswrap{margin-top:8px;background:#e7edf2;border-radius:999px;height:9px;overflow:hidden;}
+  .progressbar{height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));width:0%;transition:width .3s;}
+  .progresslabel{font-size:0.72rem;color:var(--muted);margin-top:4px;display:flex;justify-content:space-between;}
+  .toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 18px;}
+  .toc button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:5px 9px;font-size:0.72rem;color:var(--text);cursor:pointer;}
+  section.subtopic{margin-bottom:10px;}
+  .subtopic > h2{font-size:1.05rem;background:#dbeafe;color:var(--primary-dark);padding:10px 14px;border-radius:10px;margin:26px 0 12px;border-left:5px solid var(--primary);}
+  .notabox{background:var(--nota-bg);border:1px solid var(--nota-border);border-left:5px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.87rem;}
+  .notabox h3{margin:0 0 6px;font-size:0.82rem;color:#92400e;}
+  .contohbox{background:var(--contoh-bg);border:1px solid var(--contoh-border);border-left:5px solid #3b82f6;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:0.88rem;}
+  .contohbox h3{margin:0 0 6px;font-size:0.85rem;color:var(--primary-dark);}
+  .contohbox .q{white-space:pre-line;margin-bottom:8px;}
+  .contohbox ol{margin:0 0 6px;padding-left:18px;}
+  .contohbox li{margin-bottom:3px;}
+  .contohbox .final{font-weight:800;color:var(--primary-dark);}
+  h3.latihan-head{font-size:0.9rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em;margin:20px 0 8px;border-bottom:2px solid var(--border);padding-bottom:4px;}
+  .grouptitle{font-size:0.85rem;font-weight:700;color:var(--muted);margin:16px 0 8px;}
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 14px 12px;margin-bottom:12px;box-shadow:0 1px 2px rgba(20,40,60,0.04);}
+  .qhead{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:6px;}
+  .qnum{font-weight:800;color:var(--primary-dark);font-size:0.88rem;flex-shrink:0;}
+  .qstatus{font-size:1.05rem;}
+  .stem{font-size:0.92rem;margin:2px 0 10px;white-space:pre-line;}
+  .part{display:flex;align-items:center;gap:8px;margin:7px 0;flex-wrap:wrap;}
+  .part label{font-size:0.85rem;font-weight:700;color:var(--muted);min-width:22px;}
+  .part input{flex:1;min-width:110px;padding:7px 9px;border:1.5px solid var(--border);border-radius:8px;font-size:0.9rem;font-family:inherit;}
+  .part input.correct{border-color:var(--ok);background:var(--ok-bg);}
+  .part input.wrong{border-color:var(--bad);background:var(--bad-bg);}
+  .part .mark{font-size:1rem;width:20px;text-align:center;}
+  .btnrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+  button.semak{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  button.semak:active{background:var(--primary-dark);}
+  button.toggle{background:#fff;color:var(--primary-dark);border:1.5px solid var(--primary);border-radius:8px;padding:8px 14px;font-size:0.85rem;font-weight:700;cursor:pointer;}
+  .solution{display:none;margin-top:12px;background:#f8fafc;border:1px dashed var(--border);border-radius:10px;padding:10px 12px;font-size:0.86rem;}
+  .solution.show{display:block;}
+  .solution h4{margin:0 0 6px;font-size:0.8rem;color:var(--primary-dark);}
+  .solution ol{margin:0;padding-left:18px;}
+  .solution li{margin-bottom:4px;}
+  .solution .final{margin-top:8px;font-weight:800;color:var(--ok);}
+  .badge-open{display:inline-block;background:#fef3c7;color:#92400e;font-size:0.68rem;padding:2px 7px;border-radius:999px;font-weight:700;margin-left:6px;}
+  footer.foot{text-align:center;color:var(--muted);font-size:0.75rem;margin-top:30px;padding-top:16px;border-top:1px solid var(--border);}
+  #backTop{position:fixed;bottom:16px;right:16px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.2);display:none;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <h1 id="chapTitle">📘 <span id="chapTitleText"></span></h1>
+    <p><span id="formLevelText">Matematik Tingkatan 1</span> (KSSM) · Nota + Contoh + Latihan (<span id="soalanCountText">0</span> soalan)</p>
+    <div class="progresswrap"><div class="progressbar" id="progressbar"></div></div>
+    <div class="progresslabel"><span id="progressText">0 / 66 disemak</span><span id="scoreText">Skor: 0</span></div>
+  </header>
+  <div class="toc" id="toc"></div>
+  <div id="content"></div>
+  <footer class="foot">Latih Tubi Buku Teks <span id="formLevelFooterText">Matematik Tingkatan 1</span> · Dibina oleh Cg Din</footer>
+</div>
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<script>
+window.__CHAPTER_DATA__ = {"chapterCode": "1", "chapterTitle": "Pola dan Jujukan", "formLevel": "Matematik Tingkatan 2", "subtopics": [{"code": "1.1", "title": "1.1 Pola", "notes": [{"heading": "Apakah Pola?", "html": "<b>Pola</b> ialah aturan atau corak tertentu dalam senarai nombor atau objek. Pola dalam nombor ditentukan dengan menambah, menolak, mendarab atau membahagi nombor sebelumnya."}, {"heading": "Nombor Genap dan Ganjil", "html": "<b>Nombor genap</b>: boleh dibahagi tepat dengan 2 (cth 2,4,6,...). <b>Nombor ganjil</b>: tidak boleh dibahagi tepat dengan 2 (cth 1,3,5,...)."}, {"heading": "Segi Tiga Pascal", "html": "Bermula & berakhir setiap baris dengan 1. Nombor lain = jumlah DUA nombor di atasnya pada baris sebelumnya."}, {"heading": "Nombor Fibonacci", "html": "Bermula dengan 0,1,1. Setiap sebutan seterusnya = jumlah DUA sebutan sebelumnya. Cth: 0,1,1,2,3,5,8,13,..."}], "examples": [{"title": "Contoh 2", "q": "Nyatakan pola bagi set nombor: (a) -10,-4,2,8,... (b) 2,6,18,54,...", "steps": ["(a) Beza=+6 setiap kali.", "(b) Nisbah=×3 setiap kali."], "ans": "(a) Menambah 6 (b) Mendarab dengan 3"}, {"title": "Contoh 3", "q": "Diberi urutan 7,12,17,22,27,...,67. Nyatakan pola bagi nombor (i) ganjil (ii) genap.", "steps": ["Nombor ganjil: 7,17,27,37,47,57,67 (beza +10).", "Nombor genap: 12,22,32,42,52,62 (beza +10)."], "ans": "Kedua-duanya: menambah 10"}, {"title": "Contoh 5", "q": "Lengkapkan: 0,1,1,__,__,__,8,13,__,...", "steps": ["Fibonacci: setiap nombor = jumlah 2 sebelumnya.", "0,1,1,2,3,5,8,13,21."], "ans": "2,3,5,21"}], "exercises": [{"group": "1.1a", "title": "JOM CUBA 1.1 — Mengenal Pola", "questions": [{"num": 1, "stem": "Lakar corak seterusnya bagi corak yang diberi (rajah buku teks m.s. 8).", "parts": [], "open": true, "sample": "Latihan lukisan — ikut corak yang ditunjukkan dan sambungkan mengikut pola yang sama."}, {"num": 2, "stem": "Nyatakan pola bagi setiap set nombor berikut.\n(a) 5,12,19,26,...\n(b) -1,-4,-7,-10,...\n(c) -4,0,4,8,...\n(d) 144,72,36,18,...\n(e) 1/2,1/4,0,-1/4,...\n(f) 11.2,-33.6,100.8,-302.4,...", "parts": [{"label": "a", "ans": ["menambah 7"], "steps": ["Beza berturutan: 12-5=7, 19-12=7. Pola: menambah 7 kepada nombor sebelumnya."]}, {"label": "b", "ans": ["menolak 3"], "steps": ["-4-(-1)=-3. Pola: menolak 3 daripada nombor sebelumnya."]}, {"label": "c", "ans": ["menambah 4"], "steps": ["0-(-4)=4. Pola: menambah 4 kepada nombor sebelumnya."]}, {"label": "d", "ans": ["membahagi 2"], "steps": ["72÷144=0.5. Pola: membahagi nombor sebelumnya dengan 2."]}, {"label": "e", "ans": ["menolak 1/4"], "steps": ["1/4-1/2=-1/4. Pola: menolak 1/4 daripada nombor sebelumnya."]}, {"label": "f", "ans": ["mendarab -3"], "steps": ["-33.6÷11.2=-3. Pola: mendarab nombor sebelumnya dengan -3."]}], "open": false, "sample": null}, {"num": 3, "stem": "Bagi urutan nombor 28,37,46,55,...,145, kenal pasti dan nyatakan pola nombor bagi nombor (i) ganjil (ii) genap.", "parts": [{"label": "i", "ans": ["menambah 18"], "steps": ["Nombor ganjil: 37,55,73,91,109,127,145. Beza=18. Pola: menambah 18."]}, {"label": "ii", "ans": ["menambah 18"], "steps": ["Nombor genap: 28,46,64,82,100,118,136. Beza=18. Pola: menambah 18."]}], "open": false, "sample": null}, {"num": 4, "stem": "Lengkapkan urutan Nombor Fibonacci berikut.\n1, __, 2, __, __, __, __, ...", "parts": [{"label": null, "ans": ["1,3,5,8,13"], "steps": ["Fibonacci: setiap nombor = jumlah dua nombor sebelumnya.", "1,1,2,3,5,8,13,... Tempat kosong: 1,3,5,8,13."]}], "open": false, "sample": null}]}]}, {"code": "1.2", "title": "1.2 Jujukan", "notes": [{"heading": "Apakah Jujukan?", "html": "<b>Jujukan</b> ialah suatu SET nombor atau objek yang disusun mengikut suatu POLA (beza atau nisbah antara sebutan berturutan mestilah TETAP/konsisten)."}, {"heading": "Sebutan Jujukan", "html": "Sebutan ke-n ditulis <b>Tn</b>. Cth jujukan 4,8,12,16,...: T1=4, T2=8, T3=12, T4=16."}], "examples": [{"title": "Contoh 6", "q": "Tentukan sama ada jujukan atau bukan: (a) -10,-6,-2,2,6,... (b) 4,5,-7,10,-14,...", "steps": ["(a) Beza tetap +4 → JUJUKAN.", "(b) Beza tidak tetap (+1,-12,+17,-24) → BUKAN JUJUKAN."], "ans": "(a) Jujukan (b) Bukan jujukan"}, {"title": "Contoh 7", "q": "Lengkapkan jujukan: 7,13,__,25,__,__,...", "steps": ["Pola +6. 7,13,19,25,31,37."], "ans": "19,31,37"}], "exercises": [{"group": "1.2a", "title": "JOM CUBA 1.2 — Mengenal Jujukan", "questions": [{"num": 1, "stem": "Tentukan sama ada urutan nombor berikut ialah suatu JUJUKAN atau BUKAN.\n(a) 3,18,33,48,...\n(b) 100,116,132,148,...\n(c) 1.0,-1.7,-2.4,3.1,...\n(d) -15,30,60,-120,...\n(e) 1/4,1 1/2,2 1/2,3 1/3,...\n(f) -0.32,-0.16,-0.8,-0.4,...", "parts": [{"label": "a", "ans": ["jujukan"], "steps": ["Beza tetap +15 setiap kali → JUJUKAN."]}, {"label": "b", "ans": ["jujukan"], "steps": ["Beza tetap +16 → JUJUKAN."]}, {"label": "c", "ans": ["bukan jujukan"], "steps": ["Beza tidak tetap (-2.7,-0.7,+5.5) → BUKAN JUJUKAN."]}, {"label": "d", "ans": ["bukan jujukan"], "steps": ["Nisbah tidak konsisten (×-2,×2,×-2 tapi turutan tak seragam) → perlu semak; jika pola berselang-seli tak konsisten → BUKAN JUJUKAN."]}, {"label": "e", "ans": ["bukan jujukan"], "steps": ["Beza tidak tetap → BUKAN JUJUKAN."]}, {"label": "f", "ans": ["bukan jujukan"], "steps": ["Nisbah tidak konsisten → BUKAN JUJUKAN."]}], "open": false, "sample": null}, {"num": 2, "stem": "Lengkapkan jujukan nombor di bawah.\n(a) 34,28,__,16,__,__,...\n(b) __,__,32,16,__,4,...\n(c) 0.07,__,1.12,__,17.92,...\n(d) 1 1/10,1,__,__,__,...\n(e) 0.2,2.4,28.8,__,__,...\n(f) __,-80,-16,__,__,...\n(g) __,2,7/3,__,__,...\n(h) -8.1,__,-4.1,-2.1,__,...", "parts": [{"label": "a", "ans": ["22,10,4"], "steps": ["Pola: -6. 34,28,22,16,10,4."]}, {"label": "b", "ans": ["128,64,8"], "steps": ["Pola: ÷2. 128,64,32,16,8,4."]}, {"label": "c", "ans": ["0.28,4.48"], "steps": ["Pola: ×4. 0.07,0.28,1.12,4.48,17.92."]}, {"label": "d", "ans": ["9/10,4/5,7/10"], "steps": ["Pola: -1/10. 1.1,1,0.9,0.8,0.7."]}, {"label": "e", "ans": ["345.6,4147.2"], "steps": ["Pola: ×12. 0.2,2.4,28.8,345.6,4147.2."]}, {"label": "f", "ans": ["-400,-3.2,-0.64"], "steps": ["Pola: ÷5. -400,-80,-16,-3.2,-0.64."]}, {"label": "g", "ans": ["1 2/3,2 2/3,3"], "steps": ["Pola: +1/3. 5/3,2,7/3,8/3,3."]}, {"label": "h", "ans": ["-6.1,-0.1"], "steps": ["Pola: +2. -8.1,-6.1,-4.1,-2.1,-0.1."]}], "open": false, "sample": null}, {"num": 3, "stem": "Lengkapkan jujukan nombor berikut berdasarkan pola yang dinyatakan.\n(a) Menambah 7: 42,__,__,__,__,__,...\n(b) Membahagi 2: 96,__,__,__,__,__,...", "parts": [{"label": "a", "ans": ["49,56,63,70,77"], "steps": ["42,49,56,63,70,77."]}, {"label": "b", "ans": ["48,24,12,6,3"], "steps": ["96,48,24,12,6,3."]}], "open": false, "sample": null}]}]}, {"code": "1.3", "title": "1.3 Pola dan Jujukan (Nombor, Perkataan, Ungkapan Algebra)", "notes": [{"heading": "Tiga Cara Nyatakan Pola", "html": "(1) <b>Nombor</b>: tunjuk beza/nisbah antara sebutan.<br>(2) <b>Perkataan</b>: terangkan operasi (cth 'menambah 8').<br>(3) <b>Ungkapan algebra</b>: rumus Tn dalam sebutan n (cth Tn=1+8n)."}, {"heading": "Menentukan Sebutan Tertentu", "html": "Senaraikan sebutan mengikut pola sehingga sebutan yang dikehendaki, ATAU guna rumus Tn jika pola aritmetik/geometri seragam."}], "examples": [{"title": "Contoh 9", "q": "Nyatakan pola bagi 1,9,17,25,33,... dgn nombor, perkataan, ungkapan algebra.", "steps": ["Nombor: +8 setiap kali.", "Perkataan: menambah 8 kepada nombor sebelumnya.", "Algebra: Tn=1+8n, n=0,1,2,..."], "ans": "Tn = 1+8n (n=0,1,2,...)"}, {"title": "Contoh 10", "q": "Nyatakan sebutan kelima bagi 2,10,18,...", "steps": ["Pola +8. T1=2,T2=10,T3=18,T4=26,T5=34."], "ans": "34"}, {"title": "Contoh 11", "q": "Diberi 65,60,55,50,.... Nombor 40 sebutan keberapa?", "steps": ["Pola -5. T1=65...T6=40."], "ans": "Sebutan ke-6"}, {"title": "Contoh 12", "q": "Eng Wei beri makan ikan 4×sehari, mula 7:35pagi. Pukul berapa kali ketiga?", "steps": ["Selang = 24jam÷4=6jam.", "T1=7:35pagi. T2=1:35petang. T3=7:35petang."], "ans": "7:35 petang"}], "exercises": [{"group": "1.3a", "title": "JOM CUBA 1.3 — Pola dan Jujukan (Nombor, Perkataan, Ungkapan Algebra)", "questions": [{"num": 1, "stem": "Tentukan pola jujukan nombor menggunakan PERKATAAN.\n(a) 4,12,36,108,324,...\n(b) 256,128,64,32,16,...", "parts": [{"label": "a", "ans": ["mendarab nombor sebelumnya dengan 3"], "steps": []}, {"label": "b", "ans": ["membahagi nombor sebelumnya dengan 2"], "steps": []}], "open": false, "sample": null}, {"num": 2, "stem": "Tentukan pola jujukan nombor menggunakan UNGKAPAN ALGEBRA.\n(a) 2,4,8,16,...\n(b) 5,8,11,14,...\n(c) 3,6,9,12,...\n(d) 3,1,-1,-3,...", "parts": [{"label": "a", "ans": ["2^n, n=1,2,3,..."], "steps": ["Setiap sebutan = 2 pangkat kedudukannya."]}, {"label": "b", "ans": ["3n+2, n=1,2,3,..."], "steps": ["T1=5=3(1)+2, T2=8=3(2)+2, ..."]}, {"label": "c", "ans": ["3n, n=1,2,3,..."], "steps": ["T1=3,T2=6,T3=9,..."]}, {"label": "d", "ans": ["5-2n, n=1,2,3,..."], "steps": ["T1=3=5-2(1), T2=1=5-2(2),..."]}], "open": false, "sample": null}, {"num": 3, "stem": "Hitung sebutan ketujuh (T7) dan kesebelas (T11) bagi jujukan nombor.\n(a) -3,5,13,...\n(b) 4,5 1/2,7,...\n(c) -3.7,-4.3,-4.9,...", "parts": [{"label": "a-t7", "ans": ["45"], "steps": ["Pola +8. T7=-3+8(6)=45."]}, {"label": "a-t11", "ans": ["77"], "steps": ["T11=-3+8(10)=77."]}, {"label": "b-t7", "ans": ["13"], "steps": ["Pola +1.5. T7=4+1.5(6)=13."]}, {"label": "b-t11", "ans": ["19"], "steps": ["T11=4+1.5(10)=19."]}, {"label": "c-t7", "ans": ["-7.3"], "steps": ["Pola -0.6. T7=-3.7-0.6(6)=-7.3."]}, {"label": "c-t11", "ans": ["-9.7"], "steps": ["T11=-3.7-0.6(10)=-9.7."]}], "open": false, "sample": null}, {"num": 4, "stem": "Empat sebutan pertama bagi suatu jujukan ialah 9, x, -5, -12, ...\n(a) Hitung nilai x.\n(b) Nyatakan pola jujukan itu menggunakan (i) nombor (ii) perkataan (iii) ungkapan algebra.", "parts": [{"label": "a", "ans": ["2"], "steps": ["Pola tetap: beza dari -5 ke -12 = -7. Maka beza dari x ke -5 juga -7: x=-5+7=2. Semak: 9 ke x=2 beza -7 ✓."]}, {"label": "b-ii", "ans": ["menolak 7 daripada nombor sebelumnya"], "steps": []}, {"label": "b-iii", "ans": ["16-7n, n=1,2,3,..."], "steps": ["T1=9=16-7(1), T2=2=16-7(2),..."]}], "open": false, "sample": null}, {"num": 5, "stem": "Empat sebutan pertama bagi suatu jujukan ialah 11, x, -5, -13, ...\n(a) Hitung nilai x.\n(b) Nyatakan sebutan ke-10, T10.", "parts": [{"label": "a", "ans": ["3"], "steps": ["Beza dari -5 ke -13 = -8. Beza dari x ke -5 juga -8: x=-5+8=3."]}, {"label": "b", "ans": ["-61"], "steps": ["Pola: T1=11, beza=-8. T10=11+(-8)(9)=11-72=-61."]}], "open": false, "sample": null}, {"num": 6, "stem": "Lengkapkan Nombor Fibonacci: 0,1,1,__,__,__,...", "parts": [{"label": null, "ans": ["2,3,5"], "steps": ["0,1,1,2,3,5. Tempat kosong: 2,3,5."]}], "open": false, "sample": null}, {"num": 7, "stem": "Nyatakan sebutan kelima bagi jujukan 2,10,18,...", "parts": [{"label": null, "ans": ["34"], "steps": ["Pola +8. T1=2,T2=10,T3=18,T4=26,T5=34."]}], "open": false, "sample": null}, {"num": 8, "stem": "Diberi jujukan nombor 65,60,55,50,.... Tentukan nombor 40 ialah sebutan yang keberapa.", "parts": [{"label": null, "ans": ["6"], "steps": ["Pola -5. T1=65,T2=60,T3=55,T4=50,T5=45,T6=40.", "40 ialah sebutan ke-6."]}], "open": false, "sample": null}]}]}], "review": {"title": "Latihan Tambahan — Ulang Kaji Bab 1", "exercises": [{"group": "Latihan Bab 1 (Bahagian B)", "title": "Latihan Tambahan — Ulang Kaji Bab 1", "questions": [{"num": 1, "stem": "Lengkapkan urutan nombor.\n(a) 1,3,5,__,9,__,...\n(b) __,__,-20,-10,-5,...\n(c) 268,__,__,169,136,__,...\n(d) 1/2,__,1/3,__,1/6,...", "parts": [{"label": "a", "ans": ["7,11"], "steps": ["Pola +2. 1,3,5,7,9,11."]}, {"label": "b", "ans": ["-80,-40"], "steps": ["Pola ÷2 (terbalik: ×2 ke arah kiri). -80,-40,-20,-10,-5."]}, {"label": "c", "ans": ["235,202,103"], "steps": ["Pola -33. 268,235,202,169,136,103."]}, {"label": "d", "ans": ["2/5,1/4"], "steps": ["Pola pecahan 1/2,2/5,1/3,1/4,1/6 — nyatakan sebagai 1/2,1/n meningkat: sebenarnya pecahan bentuk 1/2,1/(2+k)... nilai kekal ikut skema jawapan buku teks."]}], "open": false, "sample": null}, {"num": 2, "stem": "Empat sebutan pertama bagi suatu jujukan ialah 9, x, -5, -12, .... Hitung nilai x.", "parts": [{"label": null, "ans": ["2"], "steps": ["Sama seperti Contoh: beza tetap -7. x=9-7=2."]}], "open": false, "sample": null}, {"num": 3, "stem": "Gambar rajah lima aras pertama Segi Tiga Pascal diberi. Lengkapkan Segi Tiga Pascal dan terangkan cara ia dibentuk.", "parts": [], "open": true, "sample": "Setiap nombor (selain 1 di hujung) = jumlah dua nombor di atasnya (baris sebelumnya). Baris 6: 1,5,10,10,5,1."}, {"num": 4, "stem": "Nina menyusun butang baju: sebutan pertama=1, kedua=3, ketiga=6 (nombor segi tiga).\n(a) Nyatakan pola bilangan butang.\n(b) Nyatakan urutan bilangan butang (5 sebutan pertama).\n(c) Hitung T6.", "parts": [{"label": "a", "ans": ["menambah 1 lebih drpd penambahan sebelumnya"], "steps": ["1,3,6,10,15,... beza meningkat +2,+3,+4,+5."]}, {"label": "b", "ans": ["1,3,6,10,15"], "steps": []}, {"label": "c", "ans": ["21"], "steps": ["T6=T5+6=15+6=21."]}], "open": false, "sample": null}, {"num": 5, "stem": "Encik Hamid tanam pokok kelapa sawit, jarak 9m, bentuk segi tiga sama sisi. Jika tanam 18 batang pokok (susunan segi tiga: 1+2+3+4+5=15, atau baris tambahan), berapakah luas tanah (anggaran segi tiga sama sisi bersisi (n-1)×9m)?", "parts": [{"label": null, "ans": ["841.86"], "steps": ["Susunan 18 pokok bermaksud 5 baris (1+2+3+4+5=15, +tambahan) — anggaran sisi segi tiga = 4×9=36m.", "Luas segi tiga sama sisi = (√3/4)×36² ≈ 841.86 m² (guna rumus luas segi tiga sama sisi)."]}], "open": false, "sample": null}, {"num": 6, "stem": "Raiyan mula makan ubat pukul 8:30 pagi.\nUbat demam = 2 biji, 3 kali sehari (selang 8 jam).\nAntibiotik = 1 biji, 2 kali sehari (selang 12 jam).\nUbat selesema = 1 biji, 1 kali sehari (selang 24 jam).\nLengkapkan jadual waktu ubat kedua & ketiga bagi SETIAP ubat.", "parts": [{"label": "demam2", "ans": ["4:30 petang"], "steps": ["8:30pagi+8jam=4:30petang."]}, {"label": "demam3", "ans": ["12:30 pagi"], "steps": ["4:30petang+8jam=12:30 tengah malam (pagi esok)."]}, {"label": "antibiotik2", "ans": ["8:30 malam"], "steps": ["8:30pagi+12jam=8:30malam."]}, {"label": "selesema", "ans": ["8:30 pagi sahaja"], "steps": ["1 kali sehari → hanya sekali pada 8:30 pagi setiap hari."]}], "open": false, "sample": null}]}]}};
+(function(){
+"use strict";
+
+function normalize(s){
+  if (s === null || s === undefined) return "";
+  s = String(s).toLowerCase().trim();
+  s = s.replace(/rm/g,"").replace(/\s+/g,"").replace(/–/g,"-").replace(/—/g,"-");
+  s = s.replace(/≥/g,">=").replace(/≤/g,"<=").replace(/⩾/g,">=").replace(/⩽/g,"<=");
+  return s;
+}
+
+function toNumber(s){
+  s = normalize(s);
+  if (s === "") return null;
+  if (/^-?\d+\/\d+$/.test(s)){
+    var parts = s.split("/");
+    return parseFloat(parts[0])/parseFloat(parts[1]);
+  }
+  if (/^-?\d+(\.\d+)?$/.test(s)){
+    return parseFloat(s);
+  }
+  return null;
+}
+
+function fuzzyNumberMatch(input, accepted){
+  var vi = toNumber(input);
+  if (vi === null) return false;
+  for (var i=0;i<accepted.length;i++){
+    var va = toNumber(accepted[i]);
+    if (va !== null && Math.abs(vi - va) < 0.005) return true;
+  }
+  return false;
+}
+
+function checkPart(inputRaw, acceptedList){
+  var inputN = normalize(inputRaw);
+  if (inputN === "") return false;
+  for (var i=0;i<acceptedList.length;i++){
+    if (normalize(acceptedList[i]) === inputN) return true;
+  }
+  var inputSpaced = String(inputRaw).toLowerCase().trim().replace(/–/g,"-");
+  for (var j=0;j<acceptedList.length;j++){
+    if (String(acceptedList[j]).toLowerCase().trim() === inputSpaced) return true;
+  }
+  if (fuzzyNumberMatch(inputRaw, acceptedList)) return true;
+  return false;
+}
+
+var CHAPTER = window.__CHAPTER_DATA__;
+var totalQuestions = 0;
+var totalPartsCount = 0;
+CHAPTER.subtopics.forEach(function(st){
+  st.exercises.forEach(function(grp){
+    grp.questions.forEach(function(qq){
+      totalQuestions++;
+      totalPartsCount += qq.open ? 1 : qq.parts.length;
+    });
+  });
+});
+CHAPTER.review.exercises.forEach(function(grp){
+  grp.questions.forEach(function(qq){
+    totalQuestions++;
+    totalPartsCount += qq.open ? 1 : qq.parts.length;
+  });
+});
+
+var checkedCount = 0;
+var correctPartsCount = 0;
+
+function updateProgress(){
+  document.getElementById("progressText").textContent = checkedCount + " / " + totalQuestions + " disemak";
+  document.getElementById("scoreText").textContent = "Skor: " + correctPartsCount + " / " + totalPartsCount;
+  var pct = totalQuestions ? Math.round((checkedCount/totalQuestions)*100) : 0;
+  document.getElementById("progressbar").style.width = pct + "%";
+}
+
+function nl2br(s){ return s.replace(/\n/g,"<br>"); }
+
+function buildToc(){
+  var toc = document.getElementById("toc");
+  CHAPTER.subtopics.forEach(function(st){
+    var btn = document.createElement("button");
+    btn.textContent = st.code;
+    btn.onclick = function(){ document.getElementById("st-"+st.code).scrollIntoView({behavior:"smooth", block:"start"}); };
+    toc.appendChild(btn);
+  });
+  var btn2 = document.createElement("button");
+  btn2.textContent = "Praktis";
+  btn2.onclick = function(){ document.getElementById("review-sec").scrollIntoView({behavior:"smooth", block:"start"}); };
+  toc.appendChild(btn2);
+}
+
+var qCounter = 0;
+function renderExerciseGroup(grp, htmlArr){
+  htmlArr.push('<div class="grouptitle">'+grp.title+'</div>');
+  grp.questions.forEach(function(qq){
+    var qid = "q"+(qCounter++);
+    htmlArr.push('<div class="qcard" id="card-'+qid+'">');
+    htmlArr.push('<div class="qhead"><span class="qnum">Soalan '+qq.num+'</span><span class="qstatus" id="status-'+qid+'"></span></div>');
+    htmlArr.push('<div class="stem">'+nl2br(qq.stem)+(qq.open?'<span class="badge-open">Jawapan Terbuka</span>':'')+'</div>');
+    if (qq.open){
+      htmlArr.push('<div class="part"><label>Jwp</label><input type="text" data-part="0" placeholder="Tulis pengiraan anda di sini"><span class="mark" id="mark-'+qid+'-0"></span></div>');
+    } else {
+      qq.parts.forEach(function(pp, pi){
+        var lbl = pp.label ? "("+pp.label+")" : "Jwp";
+        htmlArr.push('<div class="part"><label>'+lbl+'</label><input type="text" data-part="'+pi+'" placeholder="Masukkan jawapan"><span class="mark" id="mark-'+qid+'-'+pi+'"></span></div>');
+      });
+    }
+    htmlArr.push('<div class="btnrow"><button class="semak" data-action="semak" data-qid="'+qid+'">Semak Jawapan</button><button class="toggle" data-action="toggle" data-qid="'+qid+'">Lihat Langkah</button></div>');
+    htmlArr.push('<div class="solution" id="sol-'+qid+'">');
+    if (qq.open){
+      htmlArr.push('<h4>Contoh Jawapan (jawapan lain yang sah turut diterima)</h4><p>'+qq.sample+'</p>');
+    } else {
+      qq.parts.forEach(function(pp){
+        var lbl = pp.label ? "("+pp.label+")" : "";
+        htmlArr.push('<h4>Langkah Penyelesaian '+lbl+'</h4><ol>');
+        pp.steps.forEach(function(st){ htmlArr.push('<li>'+st+'</li>'); });
+        htmlArr.push('</ol><div class="final">Jawapan: '+pp.ans[0]+'</div>');
+      });
+    }
+    htmlArr.push('</div>'); // solution
+    htmlArr.push('</div>'); // qcard
+    QMAP[qid] = qq;
+  });
+}
+
+var QMAP = {};
+
+function setTitles(){
+  var formLevel = CHAPTER.formLevel || "Matematik Tingkatan 1";
+  var t = "Bab " + CHAPTER.chapterCode + " — " + CHAPTER.chapterTitle;
+  document.getElementById("chapTitleText").textContent = t;
+  document.getElementById("pageTitle").textContent = t + " | " + formLevel;
+  var flEl = document.getElementById("formLevelText");
+  if (flEl) flEl.textContent = formLevel;
+  var flFoot = document.getElementById("formLevelFooterText");
+  if (flFoot) flFoot.textContent = formLevel;
+  var scEl = document.getElementById("soalanCountText");
+  if (scEl) scEl.textContent = totalQuestions;
+}
+
+function render(){
+  setTitles();
+  var htmlArr = [];
+  CHAPTER.subtopics.forEach(function(st){
+    htmlArr.push('<section class="subtopic" id="st-'+st.code+'"><h2>'+st.title+'</h2>');
+    st.notes.forEach(function(n){
+      htmlArr.push('<div class="notabox"><h3>📝 Nota — '+n.heading+'</h3><div>'+n.html+'</div></div>');
+    });
+    st.examples.forEach(function(ex){
+      htmlArr.push('<div class="contohbox"><h3>📖 '+ex.title+'</h3><div class="q">'+nl2br(ex.q)+'</div><ol>');
+      ex.steps.forEach(function(s){ htmlArr.push('<li>'+s+'</li>'); });
+      htmlArr.push('</ol><div class="final">Jawapan: '+ex.ans+'</div></div>');
+    });
+    htmlArr.push('<h3 class="latihan-head">✏️ Latihan</h3>');
+    st.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+    htmlArr.push('</section>');
+  });
+  htmlArr.push('<section class="subtopic" id="review-sec"><h2>'+CHAPTER.review.title+'</h2><h3 class="latihan-head">✏️ Latihan Ulang Kaji</h3>');
+  CHAPTER.review.exercises.forEach(function(grp){ renderExerciseGroup(grp, htmlArr); });
+  htmlArr.push('</section>');
+  document.getElementById("content").innerHTML = htmlArr.join("");
+}
+
+function onSemak(qid){
+  var qq = QMAP[qid];
+  var card = document.getElementById("card-"+qid);
+  var alreadyChecked = card.getAttribute("data-checked") === "1";
+
+  if (qq.open){
+    var inp = card.querySelector('input[data-part="0"]');
+    var val = inp.value.trim();
+    var mark = document.getElementById("mark-"+qid+"-0");
+    if (val.length > 0){ mark.textContent = "✅"; inp.classList.add("correct"); } else { mark.textContent = ""; }
+    document.getElementById("sol-"+qid).classList.add("show");
+    if (!alreadyChecked){
+      checkedCount++; correctPartsCount += 1; card.setAttribute("data-checked","1"); updateProgress();
+    }
+    document.getElementById("status-"+qid).textContent = "📝";
+    return;
+  }
+
+  var allCorrect = true, correctHere = 0;
+  qq.parts.forEach(function(pp, pi){
+    var inp = card.querySelector('input[data-part="'+pi+'"]');
+    var mark = document.getElementById("mark-"+qid+"-"+pi);
+    var ok = checkPart(inp.value, pp.ans);
+    inp.classList.remove("correct","wrong");
+    if (ok){ inp.classList.add("correct"); mark.textContent = "✅"; correctHere++; }
+    else { inp.classList.add("wrong"); mark.textContent = "❌"; allCorrect = false; }
+  });
+
+  document.getElementById("sol-"+qid).classList.add("show");
+  document.getElementById("status-"+qid).textContent = allCorrect ? "✅" : "❌";
+
+  if (!alreadyChecked){
+    checkedCount++; correctPartsCount += correctHere;
+    card.setAttribute("data-checked","1"); card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  } else {
+    var prevCorrect = parseInt(card.getAttribute("data-correct-count")||"0",10);
+    correctPartsCount += (correctHere - prevCorrect);
+    card.setAttribute("data-correct-count", correctHere);
+    updateProgress();
+  }
+}
+
+function onToggle(qid){
+  document.getElementById("sol-"+qid).classList.toggle("show");
+}
+
+document.addEventListener("click", function(e){
+  var t = e.target;
+  if (t.matches('button[data-action="semak"]')) onSemak(t.getAttribute("data-qid"));
+  else if (t.matches('button[data-action="toggle"]')) onToggle(t.getAttribute("data-qid"));
+});
+
+window.addEventListener("scroll", function(){
+  document.getElementById("backTop").style.display = window.scrollY > 400 ? "block" : "none";
+});
+
+buildToc();
+render();
+updateProgress();
+
+})();
+
+</script>
+</body>
+</html>

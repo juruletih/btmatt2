@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Latih Tubi Matematik Tingkatan 2 — Indeks Bab</title>
+<style>
+  :root{
+    --bg:#f4f7f9; --card:#ffffff; --border:#dbe4ea; --text:#1c2b36; --muted:#5c7182;
+    --primary:#2563eb; --primary-dark:#1d4ed8; --accent:#f59e0b;
+    --warn-bg:#fff7ed; --warn-border:#fdba74; --warn-text:#9a3412;
+    --ok-bg:#f0fdf4; --ok-border:#86efac; --ok-text:#166534;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.6;}
+  #app{max-width:820px;margin:0 auto;padding:22px 16px 60px;}
+  header.hero{text-align:center;padding:18px 10px 22px;}
+  header.hero .emoji{font-size:2.6rem;}
+  header.hero h1{font-size:1.4rem;margin:6px 0 4px;color:var(--primary-dark);font-weight:800;}
+  header.hero p{margin:0;color:var(--muted);font-size:0.95rem;}
+  .introbox{background:#eaf1fb;border:1px solid #c7dafc;border-radius:var(--radius);
+    padding:16px 18px;margin:18px 0;font-size:0.92rem;}
+  .introbox b{color:var(--primary-dark);}
+  .introbox p{margin:8px 0;}
+  .introbox p:first-child{margin-top:0;}
+  .introbox p:last-child{margin-bottom:0;}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:16px 0 6px;font-size:0.82rem;color:var(--muted);}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .dot.ok{background:#22c55e;}
+  .dot.warn{background:#f59e0b;}
+  .chapterlist{display:flex;flex-direction:column;gap:12px;margin-top:14px;}
+  .chap{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:16px 18px;box-shadow:0 1px 3px rgba(20,40,60,0.05);
+    display:block;text-decoration:none;color:inherit;transition:transform .15s, box-shadow .15s;}
+  .chap:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(20,40,60,0.10);}
+  .chap.warn{border-left:5px solid var(--accent);}
+  .chap.ok{border-left:5px solid #22c55e;}
+  .chap-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+  .chap-num{font-size:0.75rem;font-weight:800;color:var(--primary-dark);text-transform:uppercase;letter-spacing:0.04em;}
+  .chap-title{font-size:1.05rem;font-weight:800;margin:2px 0 6px;color:var(--text);}
+  .chap-meta{font-size:0.8rem;color:var(--muted);}
+  .badge{font-size:0.7rem;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0;}
+  .badge.ok{background:var(--ok-bg);color:var(--ok-text);border:1px solid var(--ok-border);}
+  .badge.warn{background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);}
+  .pagenote{margin-top:10px;font-size:0.82rem;background:var(--warn-bg);border:1px dashed var(--warn-border);
+    color:var(--warn-text);border-radius:10px;padding:8px 12px;}
+  .pagenote b{color:var(--warn-text);}
+  footer.foot{text-align:center;color:var(--muted);font-size:0.82rem;margin-top:36px;padding-top:18px;
+    border-top:1px solid var(--border);}
+  footer.foot p{margin:4px 0;}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="hero">
+    <div class="emoji">📙✏️</div>
+    <h1>Latih Tubi Matematik Tingkatan 2</h1>
+    <p>Sahabat belajar bersama buku teks KSSM — bukan gantikan buku, tapi kawan ulang kaji</p>
+  </header>
+
+  <div class="introbox">
+    <p>👋 <b>Sama macam versi Tingkatan 1 & 3:</b> laman ini dibina untuk digunakan <b>bersama-sama</b> buku teks fizikal. Nota (konsep), Contoh (soalan berpandu), Latihan (cuba jawab sendiri dahulu, baru tekan "Semak Jawapan" untuk jalan kerja penuh).</p>
+    <p>🟢 <b>Hijau</b> — semua/hampir semua soalan boleh dijawab terus di sini.</p>
+    <p>🟠 <b>Oren</b> — bab ini melibatkan <b>rajah geometri, lukisan, atau transformasi visual</b> yang tak boleh dipaparkan penuh dalam teks. Bab 11 (Transformasi) paling bergantung rajah — <b>wajib buka buku teks</b> semasa buat latihan bab tersebut.</p>
+    <p>Jom mula ulang kaji! 💪</p>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot ok"></span> Semua/hampir semua soalan boleh dijawab terus</span>
+    <span><span class="dot warn"></span> Perlu buku teks di sisi</span>
+  </div>
+
+  <div class="chapterlist">
+
+    <a class="chap ok" href="T2_Bab1_PolaDanJujukan.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 1</div><div class="chap-title">Pola dan Jujukan</div></div><span class="badge ok">✅ 21 soalan</span></div>
+      <div class="chap-meta">Pola nombor · Jujukan · Sebutan ke-n</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab2_PemfaktoranPecahanAlgebra.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 2</div><div class="chap-title">Pemfaktoran dan Pecahan Algebra</div></div><span class="badge ok">✅ 19 soalan</span></div>
+      <div class="chap-meta">Kembangan · Pemfaktoran · Pecahan algebra</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab3_RumusAlgebra.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 3</div><div class="chap-title">Rumus Algebra</div></div><span class="badge ok">✅ 15 soalan</span></div>
+      <div class="chap-meta">Perkara rumus · Menukar subjek formula</div>
+    </a>
+
+    <a class="chap warn" href="T2_Bab4_Poligon.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 4</div><div class="chap-title">Poligon</div></div><span class="badge warn">📖 18 soalan</span></div>
+      <div class="chap-meta">Poligon sekata · Sudut pedalaman/peluaran</div>
+      <div class="pagenote">📖 <b>Sediakan buku teks m.s. 54–73</b> untuk soalan sudut yang bergantung rajah.</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab5_Bulatan.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 5</div><div class="chap-title">Bulatan</div></div><span class="badge ok">✅ 18 soalan</span></div>
+      <div class="chap-meta">Sifat simetri perentas · Lilitan · Luas bulatan</div>
+    </a>
+
+    <a class="chap warn" href="T2_Bab6_BentukGeometri3D.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 6</div><div class="chap-title">Bentuk Geometri Tiga Dimensi</div></div><span class="badge warn">📖 16 soalan</span></div>
+      <div class="chap-meta">Bentangan · Luas permukaan · Isi padu</div>
+      <div class="pagenote">📖 <b>Sediakan buku teks m.s. 98–119 + kertas grid</b> untuk soalan bentangan (amali lukisan).</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab7_Koordinat.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 7</div><div class="chap-title">Koordinat</div></div><span class="badge ok">✅ 18 soalan</span></div>
+      <div class="chap-meta">Jarak dua titik · Titik tengah</div>
+    </a>
+
+    <a class="chap warn" href="T2_Bab8_GrafFungsi.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 8</div><div class="chap-title">Graf Fungsi</div></div><span class="badge warn">📖 19 soalan</span></div>
+      <div class="chap-meta">Fungsi · Jadual nilai · Mentafsir graf</div>
+      <div class="pagenote">📖 <b>Sediakan buku teks m.s. 144–163</b> untuk soalan mentafsir graf sebenar.</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab9_LajuDanPecutan.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 9</div><div class="chap-title">Laju dan Pecutan</div></div><span class="badge ok">✅ 21 soalan</span></div>
+      <div class="chap-meta">Laju purata · Pecutan · Nyahpecutan</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab10_KecerunanGarisLurus.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 10</div><div class="chap-title">Kecerunan Garis Lurus</div></div><span class="badge ok">✅ 9 soalan</span></div>
+      <div class="chap-meta">Kecerunan · Pintasan-x/y</div>
+    </a>
+
+    <a class="chap warn" href="T2_Bab11_TransformasiIsometri.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 11</div><div class="chap-title">Transformasi Isometri</div></div><span class="badge warn">📖 21 soalan</span></div>
+      <div class="chap-meta">Translasi · Pantulan · Putaran · Simetri putaran</div>
+      <div class="pagenote">📖 <b>WAJIB buku teks m.s. 206–238.</b> Bab paling bergantung rajah dalam T2 — hampir semua soalan perlukan lihat kedudukan objek/imej sebenar.</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab12_SukatanKecenderunganMemusat.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 12</div><div class="chap-title">Sukatan Kecenderungan Memusat</div></div><span class="badge ok">✅ 19 soalan</span></div>
+      <div class="chap-meta">Mod · Median · Min · Data terkumpul</div>
+    </a>
+
+    <a class="chap ok" href="T2_Bab13_KebarangkalianMudah.html">
+      <div class="chap-top"><div><div class="chap-num">Bab 13</div><div class="chap-title">Kebarangkalian Mudah</div></div><span class="badge ok">✅ 18 soalan</span></div>
+      <div class="chap-meta">Ruang sampel · Peristiwa · Peristiwa pelengkap</div>
+    </a>
+
+  </div>
+
+  <footer class="foot">
+    <p>📙 Latih Tubi Buku Teks Matematik Tingkatan 2 (KSSM) · 13 bab · 232 soalan</p>
+    <p>Dibina oleh Cg Din · Guna bersama buku teks fizikal untuk hasil terbaik 💙</p>
+  </footer>
+</div>
+</body>
+</html>
